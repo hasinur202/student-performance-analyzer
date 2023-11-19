@@ -25,7 +25,6 @@ class UserManagementController extends Controller
     public function store (Request $request) {
         $id = 0;
         $model = null;
-
         if (!empty($request->id)) {
             $id = $request->id;
             $model = User::find($id);
@@ -34,17 +33,19 @@ class UserManagementController extends Controller
         $data = $request->validate([
             'name'  => 'required',
             'username' => 'required',
-            'email'  => 'required|email|unique:users,email',
-            'mobile_no'  => 'required|unique:users,mobile_no',
+            'email'  => 'required|email|unique:users,email,'.$id,
+            'mobile_no'  => 'required|unique:users,mobile_no,'.$id,
             'password' => 'required_if:' .$id. ',==,0',
-            'address' => 'required',
             'mobile_no' => 'required',
         ]);
 
         $all_data = $request->all();
         $all_data['type'] = $request->type ? $request->type : 2;
+  
         if (!$id) {
             $all_data['password'] = Hash::make($data['password']);
+        } else {
+            unset($all_data['password']);
         }
 
         if ($id) {
