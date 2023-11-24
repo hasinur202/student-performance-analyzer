@@ -3,7 +3,7 @@
 <html class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>Online School</title>
+    <title>Student Performance Analyzer</title>
     <!--=================================
     Meta tags
     =================================-->
@@ -44,8 +44,8 @@ Body Content
 <section id="section0" class="header">
     <div class="container">
         <div class="headerInner">
-            <h2>Online School Management</h2>
-            <p>Manage your school easiest way.</p>
+            <h2>{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</h2>
+            <p>Evaluate student performance easiest way.</p>
             <div class="row mt-30">
                 <div class="col-md-4 col-sm-6">
                     <form id="store">
@@ -53,7 +53,7 @@ Body Content
                         <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 
                         <div style="margin-bottom: 20px;">
-                            <input type="text" name="username" placeholder="Username" required style="margin-top: 0px;">
+                            <input type="email" name="username" placeholder="Email" required style="margin-top: 0px;">
                         </div>
                         <div style="margin-bottom: 20px;">
                             <input type="password" name="password" placeholder="Password" required style="margin-bottom: 0px;">
@@ -76,7 +76,7 @@ Body Content
 <section id="section1" class="our-courses mt-30 mb-50">
     <div class="container">
         <div class="text-center mb-50 head">
-            <h2 class="mb-25"><span>ONLINE</span> SCHOOLS</h2>
+            <h2 class="mb-25"><span>ONLINE</span> INSTITUTES</h2>
         </div>
         <div class="row courses top">
 
@@ -122,7 +122,7 @@ Body Content
 
 
 <footer class="text-center color-white text-bold">
-    <strong>Copyright &copy; 2023-2024 <a style="color:#0069D9" href="#">Online School</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2023-2024 <a style="color:#0069D9" href="#">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</a>.</strong> All rights reserved.
 </footer>
 
 <script src="{{ asset('frontend/js/lib/jquery.js') }}"></script>
@@ -163,7 +163,7 @@ Body Content
                     icon: 'success',
                     title: 'Login successfull'
                   })
-                  window.location.href ='/school-management/dashboard';
+                  window.location.href ='/institute-management/dashboard';
               },
               error: function(res) {
                 const result = res.responseJSON

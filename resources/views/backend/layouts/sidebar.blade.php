@@ -29,9 +29,9 @@
               </p>
             </a>
           </li>
-
-          <li class="nav-item {{ ($route == 'backend.school_admin' || $route == 'backend.other_users') ? 'menu-is-openning menu-open' : '' }}">
-            <a href="javascript:void(0)" class="nav-link {{ ($route == 'backend.school_admin' || $route == 'backend.other_users') ? 'active' : '' }}">
+          @can('isSuperAdmin')
+          <li class="nav-item {{ ($route == 'backend.institute_admin' || $route == 'backend.other_users') ? 'menu-is-openning menu-open' : '' }}">
+            <a href="javascript:void(0)" class="nav-link {{ ($route == 'backend.institute_admin' || $route == 'backend.other_users') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users-cog"></i>
               <p>
                 User Management
@@ -40,33 +40,34 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('backend.school_admin') }}" class="nav-link {{ $route == 'backend.school_admin' ? 'active' : '' }}">
+                <a href="{{ route('backend.institute_admin') }}" class="nav-link {{ $route == 'backend.institute_admin' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-angle-right"></i>
-                  <p>School Admin</p>
+                  <p>Institute Admin</p>
                 </a>
               </li>
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('backend.other_users') }}" class="nav-link">
+                <a href="{{ route('backend.other_users') }}" class="nav-link {{ $route == 'backend.other_users' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-angle-right"></i>
                   <p>Others</p>
                 </a>
               </li>
             </ul>
           </li>
+          @endcan
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('backend.institute_info') }}" class="nav-link {{ $route == 'backend.institute_info' ? 'active' : '' }}">
               <i class="nav-icon fas fa-school"></i>
               <p>
-                Schools
+                Institute Info
               </p>
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="javascript:void(0)" class="nav-link">
+          <li class="nav-item {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject') ? 'menu-is-openning menu-open' : '' }}">
+            <a href="javascript:void(0)" class="nav-link {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject') ? 'active' : '' }}">
               <i class="nav-icon fas fa-tools"></i>
               <p>
                 Configuration
@@ -75,7 +76,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('backend.class') }}" class="nav-link {{ $route == 'backend.class' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-angle-right"></i>
                   <p>Class</p>
                 </a>
@@ -83,15 +84,15 @@
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('backend.group') }}" class="nav-link {{ $route == 'backend.group' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-angle-right"></i>
-                  <p>Department</p>
+                  <p>Group</p>
                 </a>
               </li>
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('backend.section') }}" class="nav-link {{ $route == 'backend.section' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-angle-right"></i>
                   <p>Section</p>
                 </a>
@@ -99,7 +100,7 @@
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('backend.subject') }}" class="nav-link {{ $route == 'backend.subject' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-angle-right"></i>
                   <p>Subject</p>
                 </a>

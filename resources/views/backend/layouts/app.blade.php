@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Online School Management</title>
+        <title>{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</title>
         @include('backend.layouts.header')
         @yield('css')
     </head>
@@ -18,9 +18,9 @@
             <div class="preloader flex-column justify-content-center align-items-center">
                 <div class="p-2">
                     <h1 class="text-center">Welcome To</h1>
-                    <h3 class="animation__shake">Online School Management System</h3>
+                    <h3 class="animation__shake">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</h3>
                 </div>
-                <!-- <img class="animation__shake" src="{{asset('frontend/demo-data/logo.jpg')}}" alt="Online School" height="100" width="400"> -->
+                <!-- <img class="animation__shake" src="{{asset('frontend/demo-data/logo.jpg')}}" alt="Institute Logo" height="100" width="400"> -->
             </div>
             @endif
 

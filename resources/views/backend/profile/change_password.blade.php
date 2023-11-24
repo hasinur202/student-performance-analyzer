@@ -12,7 +12,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="mr-2"><i class="fas fa-home"></i></li>
-              <li class="breadcrumb-item"><a href="{{ route('backend.dashboard') }}">Online School Management</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('backend.dashboard') }}">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</a></li>
               <li class="breadcrumb-item active">Change Password</li>
             </ol>
           </div>

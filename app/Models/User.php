@@ -37,4 +37,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function hasRole($role)
+    {
+        $roleId = 0;
+        if ($role == 'super_admin') {
+            $roleId = 1;
+        } else if ($role == 'admin') {
+            $roleId = 2;
+        } else if ($role == 'teacher') {
+            $roleId = 3;
+        } else if ($role == 'teacher') {
+            $roleId = 4;
+        } else {
+            $roleId = 5;
+        }
+        return $this->type === $roleId ? true : false;
+    }
 }

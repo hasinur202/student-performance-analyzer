@@ -1,7 +1,7 @@
 
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">School Admin Entry</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Institute Admin Entry</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -23,12 +23,12 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">Username <span class="text-danger">*</span></label>
                         <input type="text" name="username" id="username" class="form-control" placeholder="Enter username">
                     </div>
-                </div>
+                </div> -->
 
                 <div class="col-md-6 password">
                     <div class="form-group">
@@ -41,7 +41,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="form-label">Mobile No.<span class="text-danger">*</span></label>
-                        <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Enter mobile no.">
+                        <input type="text" name="mobile_no" maxlength="11" id="mobile_no" class="form-control" placeholder="Enter mobile no.">
                     </div>
                 </div>
 

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Expr\Cast\Object_;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
@@ -25,10 +27,9 @@ class LoginController extends Controller
         ]);
 
         $isValid = false;
-
         if ($this->attempToLogin($request, 1)) {   // type = 1 -> Super Admin
             $isValid = true;
-        } else if ($this->attempToLogin($request, 2)) { // Type = 2 -> School Admin Login
+        } else if ($this->attempToLogin($request, 2)) { // Type = 2 -> Institute Admin Login
             $isValid = true;
         } else if ($this->attempToLogin($request, 3)) { // type = 3 -> Teacher Login
             $isValid = true;
@@ -41,10 +42,19 @@ class LoginController extends Controller
         }
 
         if ($isValid) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Successfully'
-            ], 200);
+            $permitted = $this->setCustomSession($request);
+            if ($permitted) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Login Successfully'
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized User! Please contact with Admin.'
+                ], 401);
+            }
+
         } else {
             return response()->json([
                 'success' => false,
@@ -52,6 +62,25 @@ class LoginController extends Controller
             ], 422);
         }
     }
+
+    
+    public function setCustomSession ($request) {
+        $userData = auth()->user();
+        if ($userData->type == 1) {
+            return true;
+        } else if ($userData->type == 2) {
+            $institue = DB::table('institute_informations')->where('admin_id', $userData->id)->first();
+            if ($institue) {
+                $request->session()->put('institute_id', $institue->id);
+                return true;
+            } else {
+                $this->logout($request);
+            }
+        } else {
+            return true;
+        }
+    }
+
 
     public function attempToLogin ($request, $type) {
         return Auth::attempt([
@@ -100,7 +129,7 @@ class LoginController extends Controller
             Auth::logout();
             $request->session()->flush();
 
-            return redirect()->route('auth.login');
+            return redirect()->route('frontend.home');
         }
     }
 }

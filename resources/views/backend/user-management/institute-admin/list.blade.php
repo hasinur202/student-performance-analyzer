@@ -15,10 +15,13 @@
           <div class="col-sm-6">
               <ol class="breadcrumb">
                 <li class="mr-2"><i class="fas fa-home"></i></li>
-                <li class="breadcrumb-item"><a href="{{ route('backend.dashboard') }}">Online School Management</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('backend.dashboard') }}">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</a></li>
                 <li class="breadcrumb-item">User Management</li>
-                <li class="breadcrumb-item active">School Admin List</li>
+                <li class="breadcrumb-item active">Institute Admin List</li>
               </ol>
+          </div>
+          <div class="col-sm-6">
+              <div class="float-sm-right">{{ Carbon\Carbon::now()->isoFormat('MMM Do YYYY, h:mm A') }}</div>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -32,8 +35,8 @@
           <div class="col-12">
           <div class="card">
               <div class="card-header">
-                <h2 class="card-title">School Admin List</h2>
-                <a onclick="add()" class="btn btn-primary btn-md" style="float: right;">
+                <h2 class="card-title">Institute Admin List</h2>
+                <a onclick="add()" class="btn btn-primary btn-sm" style="float: right;">
                     <i class="fa fa-plus"></i> Add New
                 </a>
               </div>
@@ -44,7 +47,7 @@
                     <tr class="text-center">
                       <th width="7%">SL No.</th>
                       <th width="20%">Name</th>
-                      <th>Username</th>
+                      <!-- <th>Username</th> -->
                       <th>Mobile</th>
                       <th>Email</th>
                       <th>Address</th>
@@ -58,7 +61,7 @@
                     <tr>
                       <td class="text-center">{{ $key + 1 }}</td>
                       <td>{{ $item->name }}</td>
-                      <td>{{ $item->username }}</td>
+                      <!-- <td>{{ $item->username }}</td> -->
                       <td>{{ $item->mobile_no }}</td>
                       <td>{{ $item->email }}</td>
                       <td>{{ $item->address }}</td>
@@ -91,9 +94,9 @@
 
     <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-          <form id="schoolAdminForm">
+          <form id="instituteAdminForm">
               @csrf
-              @include('backend.user-management.school-admin.form_modal')
+              @include('backend.user-management.institute-admin.form_modal')
           </form>
         </div>
     </div>
@@ -117,7 +120,7 @@
   <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
   <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-  <script src="{{asset('/backend/custom-js/school-admin.js')}}"></script>
+  <script src="{{asset('/backend/custom-js/institute-admin.js')}}"></script>
 
   <script>
     $(function () {
@@ -129,26 +132,26 @@
     });
 
     function add () {
-      $('#schoolAdminForm').trigger("reset");
+      $('#instituteAdminForm').trigger("reset");
       $("#modal-form").modal('show');
       $(".password").show();
     }
 
     function edit (item) {
       $("#modal-form").modal('show');
-      $('#schoolAdminForm').append(`<input type="text" hidden name="id" value="${item.id}" id="id">`);
-      $("#exampleModalLabel").text("School Admin Update");
+      $('#instituteAdminForm').append(`<input type="text" hidden name="id" value="${item.id}" id="id">`);
+      $("#exampleModalLabel").text("Institute Admin Update");
 
       $("#name").val(item.name);
       $("#email").val(item.email);
-      $("#username").val(item.username);
+      // $("#username").val(item.username);
       $(".password").hide();
       $("#mobile_no").val(item.mobile_no);
       $("#address").val(item.address);
     }
 
     function changeStatus (id) {
-      const uri = '/school-management/user-management/school-admin/toggle-status';  
+      const uri = '/institute-management/user-management/institute-admin/toggle-status';  
       toggleStatus(uri, id)
     }
     

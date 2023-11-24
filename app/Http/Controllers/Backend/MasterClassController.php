@@ -3,56 +3,54 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\MasterClass;
+use App\Services\CommonDataService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
-class UserManagementController extends Controller
+class MasterClassController extends Controller
 {
     public function index()
     {
-        $data = User::where('type', 2)->latest()->get();
-        return view('backend.user-management.institute-admin.list', ['data' => $data]);
-    }
+        $insId = session('institute_id') ? session('institute_id') : null;
+        $data = MasterClass::orderBy('id', 'asc')->when($insId, function ($q) use ($insId) {
+            $q->where('institute_id', $insId);
+        })->get();
 
+        $instituteList = CommonDataService::instituteList();
 
-    public function othersIndex()
-    {
-        $data = User::where('type', '>', 2)->latest()->get();
-        return view('backend.user-management.others.list', ['data' => $data]);
+        return view('backend.master-class.list', ['data' => $data, 'instituteList' => $instituteList, 'institute_id' => $insId ?? 0]);
     }
 
     public function store (Request $request) {
         $id = 0;
         $model = null;
+
         if (!empty($request->id)) {
             $id = $request->id;
-            $model = User::find($id);
+            $model = MasterClass::find($id);
         }
 
-        $data = $request->validate([
-            'name'  => 'required',
-            // 'username' => 'required',
-            'email'  => 'required|email|unique:users,email,'.$id,
-            'mobile_no'  => 'required|unique:users,mobile_no,'.$id,
-            'password' => 'required_if:' .$id. ',==,0',
-            'mobile_no' => 'required',
+        $request->validate([
+            'institute_id'  => 'required|integer',
+            'class_name' => [
+                'required',
+                 Rule::unique('classes')->where(function ($q) use ($request, $id) {
+                    $q->where('institute_id', $request->institute_id);
+                    if ($id) {
+                        $q =$q->where('id', '!=' ,$id);
+                    }
+                    return $q;
+                 }),
+            ]
         ]);
 
         $all_data = $request->all();
-        $all_data['type'] = $request->type ? $request->type : 2;
-        $all_data['username'] = $request->email;
-  
-        if (!$id) {
-            $all_data['password'] = Hash::make($data['password']);
-        } else {
-            unset($all_data['password']);
-        }
 
         if ($id) {
             $data = $model->update($all_data);
         } else {
-            $data = User::create($all_data);
+            $data = MasterClass::create($all_data);
         }
 
         if ($data) {
@@ -72,7 +70,7 @@ class UserManagementController extends Controller
 
     public function changeStatus(Request $request){
 
-        $model = User::find($request->id);
+        $model = MasterClass::find($request->id);
         
         $model->status = $model->status == 1 ? 2 : 1;
         $model->update();

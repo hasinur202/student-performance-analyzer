@@ -3,9 +3,9 @@ function store () {
   $("#loading").show();
   $(document).find("div.text-danger").remove();
   $.ajax({
-      url: "/school-management/user-management/school-admin/store",
+      url: "/institute-management/group/store",
       method: "POST",
-      data: new FormData(document.getElementById("schoolAdminForm")),
+      data: new FormData(document.getElementById("submittedForm")),
       dataType: 'JSON',
       contentType: false,
       cache: false,
@@ -42,16 +42,16 @@ $(function () {
         store()
       }
     });
-    const id = document.getElementById("id") ? document.getElementById("id").value : 0;
-    $('#schoolAdminForm').validate({
+    $('#submittedForm').validate({
       rules: {
-        name: { required: true },
-        username: { required: true },
-        mobile_no: { required: true },
-        email: { required: true },
-        address: { required: false },
-        password: { required: id ? false : true },
-        type: { required: true }
+        group_name: { required: true },
+        institute_id: { required: true },
+        class_id: { required: true }
+      },
+      messages: {
+        group_name: { required: "Please write group name" },
+        institute_id: { required: "Please select institute" },
+        class_id: { required: "Please select class" }
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {

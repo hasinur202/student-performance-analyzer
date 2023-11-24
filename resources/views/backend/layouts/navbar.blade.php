@@ -9,7 +9,7 @@
           <!-- </a> -->
           <a href="{{ route('backend.dashboard') }}" class="nav-link text-muted h5">
           <img class="brand-logo-light" src="{{asset('frontend/demo-data/logo3.jpg')}}" alt="" width="50" height="40"/>
-          <b class="ml-3 d-none d-sm-inline-block">Online School Management</b>
+          <b class="ml-3 d-none d-sm-inline-block">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</b>
         </a>
       </li>
     </ul>

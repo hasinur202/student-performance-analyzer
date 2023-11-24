@@ -16,8 +16,7 @@
               <ol class="breadcrumb">
                 <li class="mr-2"><i class="fas fa-home"></i></li>
                 <li class="breadcrumb-item"><a href="{{ route('backend.dashboard') }}">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</a></li>
-                <li class="breadcrumb-item">User Management</li>
-                <li class="breadcrumb-item active">Other Users List</li>
+                <li class="breadcrumb-item active">Institute Information</li>
               </ol>
           </div>
           <div class="col-sm-6">
@@ -35,10 +34,12 @@
           <div class="col-12">
           <div class="card">
               <div class="card-header">
-                <h2 class="card-title">Other Users List</h2>
-                <a onclick="add()" class="btn btn-primary btn-sm" style="float: right;">
+                <h3 class="card-title">Institute Information List</h3>
+                @can('isSuperAdmin')
+                <a href="{{ route('backend.institute_info.add') }}" class="btn btn-primary btn-sm" style="float: right;">
                     <i class="fa fa-plus"></i> Add New
                 </a>
+                @endcan
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -46,14 +47,13 @@
                   <thead>
                     <tr class="text-center">
                       <th width="7%">SL No.</th>
-                      <th width="20%">Name</th>
-                      <!-- <th>Username</th> -->
-                      <th>Type</th>
-                      <th>Mobile</th>
+                      <th>Institute Name</th>
+                      <th>Institute Admin</th>
                       <th>Email</th>
-                      <th>Address</th>
+                      <th>Phone/Mobile</th>
+                      <th>Sorting Order</th>
+                      <th width="10%">Created At</th>
                       <th width="10%">Status</th>
-                      <th width="15%">Created At</th>
                       <th width="12%">Action</th>
                     </tr>
                   </thead>
@@ -61,24 +61,16 @@
                     @foreach($data as $key => $item)
                     <tr>
                       <td class="text-center">{{ $key + 1 }}</td>
-                      <td>{{ $item->name }}</td>
-                      <!-- <td>{{ $item->username }}</td> -->
                       <td>
-                            @if($item->type == 1)
-                              {{ 'Super Admin' }}
-                              @elseif ($item->type == 2)
-                              {{ 'Administrator' }}
-                              @elseif ($item->type == 3)
-                              {{ 'Teacher' }}
-                              @elseif ($item->type == 4)
-                              {{ 'Parent' }}
-                              @else
-                              {{ 'Student' }}
-                            @endif
+                          <img class="profile-user-img mr-1" style="width: 3rem;height:3rem"
+                                  src="/storage/{{ $item->logo }}" alt="Logo">
+                          {{ $item->inst_name }}
                       </td>
-                      <td>{{ $item->mobile_no }}</td>
-                      <td>{{ $item->email }}</td>
-                      <td>{{ $item->address }}</td>
+                      <td class="text-center">{{ $item->admin->name }}</td>
+                      <td class="text-center">{{ $item->email }}</td>
+                      <td class="text-center">{{ $item->phone }}</td>
+                      <td class="text-center">{!! $item->sorting_order !!}</td>
+                      <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
                       <td class="text-center">
                         @if($item->status == 1)
                           <span class="badge badge-success">Active</span>
@@ -86,14 +78,14 @@
                           <span class="badge badge-danger">Inactive</span>
                         @endif                            
                       </td>
-                      <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
                       <td class="text-center">
-                        <button onclick="edit({{ $item }})" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></button>
-                        @if($item->status == 1)
-                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-success"><i class="fas fa-toggle-on"></i></button>
-                        @else
-                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-danger"></i> <i class="fas fa-toggle-off"></i></button>
-                        @endif
+                        <button onclick="viewDetails({{ $item }})" class="btn btn-outline-info btn-md"><i class="fas fa-eye"></i></button>
+                        @can('isSuperAdmin')
+                            <a href="{{ url('/institute-management/institute-info/edit/'.$item->id) }}" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></a>
+                            <button onclick="changeStatus({{ $item->id }})" type="button" class="btn {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
+                              <i class="fas fa-toggle-{{ $item->status == 1 ? 'on' : 'off' }}"></i>
+                            </button>
+                        @endcan
                       </td>
                     </tr>
                     @endforeach
@@ -106,12 +98,9 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-          <form id="instituteAdminForm">
-              @csrf
-              @include('backend.user-management.others.form_modal')
-          </form>
+            @include('backend.institute-info.details')
         </div>
     </div>
 
@@ -134,7 +123,6 @@
   <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
   <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-  <script src="{{asset('/backend/custom-js/institute-admin.js')}}"></script>
 
   <script>
     $(function () {
@@ -145,50 +133,21 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
 
-    function add () {
-      $('#instituteAdminForm').trigger("reset");
-      $("#modal-form").modal('show');
-      $('#type').text('');
-      const typeList = [
-        { id: 3, text: 'Teacher' },
-        { id: 4, text: 'Parent' },
-        { id: 5, text: 'Student' }
-      ];
 
-      typeList.forEach(function (item) {
-          $('#type').append("<option selected='selected' hidden>Select Type</option><option value='"+item.id+"'>"+item.text+"</option>");
-      });
-
-      $(".password").show();
-    }
-
-    function edit (item) {
-      $("#modal-form").modal('show');
-      $('#instituteAdminForm').append(`<input type="text" hidden name="id" value="${item.id}" id="id">`);
-      $("#exampleModalLabel").text("Other Users Update");
-
-      $("#name").val(item.name);
-      $("#email").val(item.email);
-      // $("#username").val(item.username);
-      $(".password").hide();
-      $("#mobile_no").val(item.mobile_no);
-      $("#address").val(item.address);
-
-      const typeList = [
-        { id: 3, text: 'Teacher' },
-        { id: 4, text: 'Parent' },
-        { id: 5, text: 'Student' }
-      ];
-
-      $('#type').text('');
-        typeList.forEach(function (el) {
-            $('#type').append("<option " + (el.id === item.type ? 'selected' : '') + " value="+el.id+">"+el.text+"</option>");
-        });
-
+    function viewDetails(item){
+        $("#modal-detail").modal('show');
+        $("#inst_name").text(item.inst_name);
+        $("#admin_id").text(item.admin.name);
+        $("#email").text(item.email);
+        $("#phone").text(item.phone);
+        $("#address").text(item.address);
+        $("#establishment_year").text(item.establishment_year);
+        $("#description").text(item.description);
+        $('#logo').attr('src', '/storage/' + item.logo);
     }
 
     function changeStatus (id) {
-      const uri = '/institute-management/user-management/institute-admin/toggle-status';  
+      const uri = '/institute-management/institute-info/toggle-status';  
       toggleStatus(uri, id)
     }
     
