@@ -28,22 +28,22 @@ class AuthServiceProvider extends ServiceProvider
         /** define a admin user role */
         Gate::define('isSuperAdmin', function($user) {
             return $user->type == '1';
-         });
+        });
 
         Gate::define('isAdmin', function($user) {
-           return $user->type == '2';
+           return ($user->type == '1' || $user->type == '2');
         });
 
         Gate::define('isTeacher', function($user) {
-            return $user->type == '3';
+            return ($user->type == '1' || $user->type == '2' || $user->type == '3');
         });
 
         Gate::define('isParent', function($user) {
-            return $user->type == '4';
+            return ($user->type == '1' || $user->type == '2' || $user->type == '4');
         });
 
         Gate::define('isStudent', function($user) {
-            return $user->type == '5';
+            return ($user->type == '1' || $user->type == '2' || $user->type == '3' || $user->type == '4' || $user->type == '5');
         });
     }
 }

@@ -3,9 +3,9 @@ function store () {
   $("#loading").show();
   $(document).find("div.text-danger").remove();
   $.ajax({
-      url: "/user-management/institute-admin/store",
+      url: "/configuration/shift/store",
       method: "POST",
-      data: new FormData(document.getElementById("instituteAdminForm")),
+      data: new FormData(document.getElementById("submittedForm")),
       dataType: 'JSON',
       contentType: false,
       cache: false,
@@ -42,16 +42,14 @@ $(function () {
         store()
       }
     });
-    const id = document.getElementById("id") ? document.getElementById("id").value : 0;
-    $('#instituteAdminForm').validate({
+    $('#submittedForm').validate({
       rules: {
-        name: { required: true },
-        // username: { required: true },
-        mobile_no: { required: true },
-        email: { required: true },
-        address: { required: false },
-        password: { required: id ? false : true },
-        type: { required: true }
+        shift_name: { required: true },
+        institute_id: { required: true }
+      },
+      messages: {
+        class_name: { required: "Please write shift name" },
+        institute_id: { required: "Please select institute name" }
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {

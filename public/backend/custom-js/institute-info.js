@@ -3,7 +3,7 @@ function store () {
   $("#loading").show();
   $(document).find("div.text-danger").remove();
   $.ajax({
-      url: "/institute-management/institute-info/store",
+      url: "/institute-info/store",
       method: "POST",
       data: new FormData(document.getElementById("instituteFormSubmit")),
       enctype: 'multipart/form-data',
@@ -18,7 +18,7 @@ function store () {
             icon: 'success',
             title: res.message
           })
-          window.location.href ='/institute-management/institute-info/list';
+          window.location.href ='/institute-info/list';
         }
       },
       error: function(res) {

@@ -163,7 +163,7 @@ Body Content
                     icon: 'success',
                     title: 'Login successfull'
                   })
-                  window.location.href ='/institute-management/dashboard';
+                  window.location.href ='/dashboard';
               },
               error: function(res) {
                 const result = res.responseJSON

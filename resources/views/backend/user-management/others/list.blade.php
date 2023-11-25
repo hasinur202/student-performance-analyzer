@@ -36,9 +36,9 @@
           <div class="card">
               <div class="card-header">
                 <h2 class="card-title">Other Users List</h2>
-                <a onclick="add()" class="btn btn-primary btn-sm" style="float: right;">
+                <!-- <a onclick="add()" class="btn btn-primary btn-sm" style="float: right;">
                     <i class="fa fa-plus"></i> Add New
-                </a>
+                </a> -->
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -88,7 +88,7 @@
                       </td>
                       <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
                       <td class="text-center">
-                        <button onclick="edit({{ $item }})" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></button>
+                        <!-- <button onclick="edit({{ $item }})" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></button> -->
                         @if($item->status == 1)
                         <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-success"><i class="fas fa-toggle-on"></i></button>
                         @else
@@ -188,7 +188,7 @@
     }
 
     function changeStatus (id) {
-      const uri = '/institute-management/user-management/institute-admin/toggle-status';  
+      const uri = '/user-management/institute-admin/toggle-status';  
       toggleStatus(uri, id)
     }
     

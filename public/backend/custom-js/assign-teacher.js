@@ -3,22 +3,22 @@ function store () {
   $("#loading").show();
   $(document).find("div.text-danger").remove();
   $.ajax({
-      url: "/user-management/institute-admin/store",
+      url: "/class-teacher/store",
       method: "POST",
-      data: new FormData(document.getElementById("instituteAdminForm")),
+      data: new FormData(document.getElementById("handleFormSubmit")),
+      enctype: 'multipart/form-data',
       dataType: 'JSON',
       contentType: false,
       cache: false,
       processData: false,
       success: function(res) {
+        $("#loading").hide();
         if (res.success) {
           Toast.fire({
             icon: 'success',
             title: res.message
           })
-          $("#loading").hide();
-          $("#modal-form").modal('show');
-          window.location.reload();
+          window.location.href ='/class-teacher/list';
         }
       },
       error: function(res) {
@@ -43,15 +43,20 @@ $(function () {
       }
     });
     const id = document.getElementById("id") ? document.getElementById("id").value : 0;
-    $('#instituteAdminForm').validate({
+    $('#handleFormSubmit').validate({
       rules: {
-        name: { required: true },
-        // username: { required: true },
-        mobile_no: { required: true },
-        email: { required: true },
-        address: { required: false },
-        password: { required: id ? false : true },
-        type: { required: true }
+        institute_id: { required: true },
+        teacher_id: { required: true },
+        class_id: { required: true },
+        section_id: { required: true },
+        subject_id: { required: true },
+        shift_id: { required: true },
+        year: { required: true },
+      },
+      messages: {
+        institute_id: {
+          required: "Please select institute"
+        }
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {

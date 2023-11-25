@@ -16,7 +16,7 @@
               <ol class="breadcrumb">
                 <li class="mr-2"><i class="fas fa-home"></i></li>
                 <li class="breadcrumb-item"><a href="{{ route('backend.dashboard') }}">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</a></li>
-                <li class="breadcrumb-item active">Institute Information</li>
+                <li class="breadcrumb-item active">Class Wise Teacher</li>
               </ol>
           </div>
           <div class="col-sm-6">
@@ -34,9 +34,9 @@
           <div class="col-12">
           <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Institute Information List</h3>
-                @can('isSuperAdmin')
-                <a href="{{ route('backend.institute_info.add') }}" class="btn btn-primary btn-sm" style="float: right;">
+                <h3 class="card-title">Class Wise Teacher List</h3>
+                @can('isTeacher')
+                <a href="{{ route('backend.class_teacher.add') }}" class="btn btn-primary btn-sm" style="float: right;">
                     <i class="fa fa-plus"></i> Add New
                 </a>
                 @endcan
@@ -47,13 +47,15 @@
                   <thead>
                     <tr class="text-center">
                       <th width="7%">SL No.</th>
-                      <th>Institute Name</th>
+                      <th>Teacher</th>
+                      <th>Class</th>
+                      <th>Group</th>
+                      <th>Section</th>
+                      <th>Subject</th>
+                      <th>Shift</th>
                       <th>Institute Admin</th>
-                      <th>Email</th>
-                      <th>Phone/Mobile</th>
-                      <th>Sorting Order</th>
                       <th width="10%">Created At</th>
-                      <th width="10%">Status</th>
+                      <!-- <th width="10%">Status</th> -->
                       <th width="12%">Action</th>
                     </tr>
                   </thead>
@@ -62,29 +64,28 @@
                     <tr>
                       <td class="text-center">{{ $key + 1 }}</td>
                       <td>
-                          <img class="profile-user-img mr-1" style="width: 3rem;height:3rem"
-                                  src="/storage/{{ $item->logo }}" alt="Logo">
-                          {{ $item->inst_name }}
+                          {{ $item->teacher->user->name }}
                       </td>
-                      <td class="text-center">{{ $item->admin->name }}</td>
-                      <td class="text-center">{{ $item->email }}</td>
-                      <td class="text-center">{{ $item->phone }}</td>
-                      <td class="text-center">{!! $item->sorting_order !!}</td>
+                      <td class="text-center">{{ $item->class->class_name }}</td>
+                      <td class="text-center">{{ $item->group_id ? $item->group->group_name : ''}}</td>
+                      <td class="text-center">{{ $item->section->section_name }}</td>
+                      <td class="text-center">{{ $item->subject->subject_name }}</td>
+                      <td class="text-center">{{ $item->shift->shift_name }}</td>
+                      <td class="text-center">{{ $item->institute->inst_name }}</td>
                       <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
-                      <td class="text-center">
+                      <!-- <td class="text-center">
                         @if($item->status == 1)
                           <span class="badge badge-success">Active</span>
                         @else
                           <span class="badge badge-danger">Inactive</span>
                         @endif                            
-                      </td>
+                      </td> -->
                       <td class="text-center">
-                        <button onclick="viewDetails({{ $item }})" class="btn btn-outline-info btn-md"><i class="fas fa-eye"></i></button>
-                        @can('isSuperAdmin')
-                            <a href="{{ url('/institute-info/edit/'.$item->id) }}" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></a>
-                            <button onclick="changeStatus({{ $item->id }})" type="button" class="btn {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
-                              <i class="fas fa-toggle-{{ $item->status == 1 ? 'on' : 'off' }}"></i>
-                            </button>
+                        @can('isAdmin')
+                        <a href="{{ url('/class-teacher/edit/'.$item->id) }}" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></a>
+                        <!-- <button onclick="changeStatus({{ $item->id }})" type="button" class="btn {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
+                          <i class="fas fa-toggle-{{ $item->status == 1 ? 'on' : 'off' }}"></i>
+                        </button> -->
                         @endcan
                       </td>
                     </tr>
@@ -100,7 +101,7 @@
 
     <div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            @include('backend.institute-info.details')
+            @include('backend.class-teacher.details')
         </div>
     </div>
 
@@ -136,18 +137,23 @@
 
     function viewDetails(item){
         $("#modal-detail").modal('show');
-        $("#inst_name").text(item.inst_name);
-        $("#admin_id").text(item.admin.name);
-        $("#email").text(item.email);
-        $("#phone").text(item.phone);
-        $("#address").text(item.address);
-        $("#establishment_year").text(item.establishment_year);
-        $("#description").text(item.description);
-        $('#logo').attr('src', '/storage/' + item.logo);
+        $("#inst_name").text(item.institute.inst_name);
+        $("#name").text(item.user.name);
+        $("#email").text(item.user.email);
+        $("#mobile_no").text(item.user.mobile_no);
+        $("#address").text(item.user.address);
+        $("#per_address").text(item.per_address);
+        $("#nid").text(item.nid);
+        $("#auto_id").text(item.auto_id);
+        $("#dob").text(item.dob);
+        $("#gender").text(item.gender == 1 ? 'Male' : 'Female');
+        $("#year").text(item.year);
+        $("#edu_qualification").text(item.edu_qualification);
+        $('#photo').attr('src', '/storage/' + item.user.photo);
     }
 
     function changeStatus (id) {
-      const uri = '/institute-info/toggle-status';  
+      const uri = '/teacher/toggle-status';  
       toggleStatus(uri, id)
     }
     

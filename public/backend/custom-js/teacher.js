@@ -3,22 +3,22 @@ function store () {
   $("#loading").show();
   $(document).find("div.text-danger").remove();
   $.ajax({
-      url: "/user-management/institute-admin/store",
+      url: "/teacher/store",
       method: "POST",
-      data: new FormData(document.getElementById("instituteAdminForm")),
+      data: new FormData(document.getElementById("handleFormSubmit")),
+      enctype: 'multipart/form-data',
       dataType: 'JSON',
       contentType: false,
       cache: false,
       processData: false,
       success: function(res) {
+        $("#loading").hide();
         if (res.success) {
           Toast.fire({
             icon: 'success',
             title: res.message
           })
-          $("#loading").hide();
-          $("#modal-form").modal('show');
-          window.location.reload();
+          window.location.href ='/teacher/list';
         }
       },
       error: function(res) {
@@ -43,15 +43,31 @@ $(function () {
       }
     });
     const id = document.getElementById("id") ? document.getElementById("id").value : 0;
-    $('#instituteAdminForm').validate({
+    $('#handleFormSubmit').validate({
       rules: {
         name: { required: true },
-        // username: { required: true },
-        mobile_no: { required: true },
+        institute_id: { required: true },
         email: { required: true },
-        address: { required: false },
-        password: { required: id ? false : true },
-        type: { required: true }
+        mobile_no: { required: true },
+        address: { required: true },
+        per_address: { required: true },
+        edu_qualification: { required: true },
+        year: { required: true },
+        dob: { required: true },
+        gender: { required: true },
+        nid: { required: true },
+        photo: { required: false, extension: "jpg|jpeg|png", filesize : 1 }
+      },
+      messages: {
+        name: {
+          required: "Please write teacher name"
+        },
+        institute_id: {
+          required: "Please select institute"
+        },
+        photo: {
+          required: "File must be type of jpg/jpeg/png."
+        }
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {

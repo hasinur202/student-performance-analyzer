@@ -13,6 +13,17 @@
         </div>
         <div class="info">
           <a href="{{ route('backend.profile') }}" class="d-block">{{ auth()->user()->name }}</a>
+          @if(auth()->user()->type == 1)
+          <span class="badge badge-info">Super Admin</span>
+          @elseif(auth()->user()->type == 2)
+          <span class="badge badge-warning">Institute Admin</span>
+          @elseif (auth()->user()->type == 3)
+          <span class="badge badge-warning">Teacher</span>
+          @elseif (auth()->user()->type == 4)
+          <span class="badge badge-warning">Parent</span>
+          @else
+          <span class="badge badge-warning">Student</span>
+          @endif
         </div>
       </div>
 
@@ -56,7 +67,7 @@
             </ul>
           </li>
           @endcan
-
+          @can('isAdmin')
           <li class="nav-item">
             <a href="{{ route('backend.institute_info') }}" class="nav-link {{ $route == 'backend.institute_info' ? 'active' : '' }}">
               <i class="nav-icon fas fa-school"></i>
@@ -65,9 +76,49 @@
               </p>
             </a>
           </li>
+          @endcan
+          @can('isTeacher')
+          <li class="nav-item">
+            <a href="{{ route('backend.teacher') }}" class="nav-link {{ $route == 'backend.teacher' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-chalkboard-teacher"></i>
+              <p>
+                Teachers
+              </p>
+            </a>
+          </li>
+          @endcan
+          <li class="nav-item">
+            <a href="{{ route('backend.class_teacher') }}" class="nav-link {{ $route == 'backend.class_teacher' ? 'active' : '' }}">
+               <i class="nav-icon fas fa-tasks"></i>
+              <p>
+                Class Wise Teacher
+              </p>
+            </a>
+          </li>
 
-          <li class="nav-item {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject') ? 'menu-is-openning menu-open' : '' }}">
-            <a href="javascript:void(0)" class="nav-link {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject') ? 'active' : '' }}">
+          @can('isParent')
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-user-friends"></i>
+              <p>
+                Parents
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class='nav-icon fas fa-user-graduate'></i>
+              <p>
+                Students
+              </p>
+            </a>
+          </li>
+
+        @can('isAdmin')
+          <li class="nav-item {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject' || $route == 'backend.shift') ? 'menu-is-openning menu-open' : '' }}">
+            <a href="javascript:void(0)" class="nav-link {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject' || $route == 'backend.shift') ? 'active' : '' }}">
               <i class="nav-icon fas fa-tools"></i>
               <p>
                 Configuration
@@ -106,7 +157,16 @@
                 </a>
               </li>
             </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('backend.shift') }}" class="nav-link {{ $route == 'backend.shift' ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-angle-right"></i>
+                  <p>Shift</p>
+                </a>
+              </li>
+            </ul>
           </li>
+          @endcan
 
         </ul>
       </nav>

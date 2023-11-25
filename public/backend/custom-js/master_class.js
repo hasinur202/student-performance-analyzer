@@ -3,7 +3,7 @@ function store () {
   $("#loading").show();
   $(document).find("div.text-danger").remove();
   $.ajax({
-      url: "/institute-management/class/store",
+      url: "/configuration/class/store",
       method: "POST",
       data: new FormData(document.getElementById("submittedForm")),
       dataType: 'JSON',

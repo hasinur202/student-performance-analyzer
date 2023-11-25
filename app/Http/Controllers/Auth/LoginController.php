@@ -69,9 +69,18 @@ class LoginController extends Controller
         if ($userData->type == 1) {
             return true;
         } else if ($userData->type == 2) {
-            $institue = DB::table('institute_informations')->where('admin_id', $userData->id)->first();
+            $institue = DB::table('institute_informations')->where('admin_id', $userData->id)->where('status', 1)->first();
             if ($institue) {
                 $request->session()->put('institute_id', $institue->id);
+                return true;
+            } else {
+                $this->logout($request);
+            }
+        } else if ($userData->type == 3) {
+            $teacher = DB::table('teachers')->where('user_id', $userData->id)->where('status', 1)->first();
+            if ($teacher) {
+                $request->session()->put('institute_id', $teacher->institute_id);
+                $request->session()->put('teacher_id', $teacher->id);
                 return true;
             } else {
                 $this->logout($request);

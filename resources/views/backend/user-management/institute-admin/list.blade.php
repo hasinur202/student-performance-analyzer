@@ -151,7 +151,7 @@
     }
 
     function changeStatus (id) {
-      const uri = '/institute-management/user-management/institute-admin/toggle-status';  
+      const uri = '/user-management/institute-admin/toggle-status';  
       toggleStatus(uri, id)
     }
     

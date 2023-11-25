@@ -17,7 +17,7 @@
                 <li class="mr-2"><i class="fas fa-home"></i></li>
                 <li class="breadcrumb-item"><a href="{{ route('backend.dashboard') }}">{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</a></li>
                 <li class="breadcrumb-item">Configuration</li>
-                <li class="breadcrumb-item active">Class</li>
+                <li class="breadcrumb-item active">Shift</li>
               </ol>
           </div>
           <div class="col-sm-6">
@@ -33,7 +33,7 @@
             <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Class List</h3>
+                  <h3 class="card-title">Shift List</h3>
                   <a onclick="add({{ $instituteList }}, {{ $institute_id }})" class="btn btn-primary btn-sm" style="float: right;">
                       <i class="fa fa-plus"></i> Add New
                   </a>
@@ -44,7 +44,7 @@
                     <thead>
                       <tr class="text-center">
                         <th width="7%">SL No.</th>
-                        <th>Class Name</th>
+                        <th>Shift Name</th>
                         <th>Institute</th>
                         <th width="15%">Created At</th>
                         <th width="10%">Status</th>
@@ -55,7 +55,7 @@
                       @foreach($data as $key => $item)
                       <tr>
                         <td class="text-center">{{ $key + 1 }}</td>
-                        <td>{{ $item->class_name }}</td>
+                        <td>{{ $item->shift_name }}</td>
                         <td>{{ $item->institute->inst_name }}</td>
                         <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
                         <td class="text-center">
@@ -88,7 +88,7 @@
           <div class="modal-dialog modal-md" role="document">
             <form id="submittedForm">
                 @csrf
-                @include('backend.master-class.form_modal')
+                @include('backend.master-shift.form_modal')
             </form>
           </div>
       </div>
@@ -112,7 +112,7 @@
   <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
   <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-  <script src="{{asset('/backend/custom-js/master_class.js')}}"></script>
+  <script src="{{asset('/backend/custom-js/master_shift.js')}}"></script>
 
   <script>
     $(function () {
@@ -127,7 +127,7 @@
       $('#submittedForm').trigger("reset");
       $("#modal-form").modal('show');
       $('#mydropdown').text('');
-      $("#exampleModalLabel").text("Class Entry");
+      $("#exampleModalLabel").text("Shift Entry");
       $("#id").val('');
       
       instituteList.forEach(function (item) {
@@ -144,17 +144,17 @@
       $('#submittedForm').trigger("reset");
       $("#modal-form").modal('show');
       $('#submittedForm').append(`<input type="text" hidden name="id" value="${item.id}" id="id">`);
-      $("#exampleModalLabel").text("Class Modify");
+      $("#exampleModalLabel").text("Shift Modify");
       $('#mydropdown').text('');
       instituteList.forEach(function (el) {
           $('#mydropdown').append("<option " + (el.id === item.institute_id ? 'selected' : '') + " value="+el.id+">"+el.inst_name+"</option>");
       });
 
-      $("#class_name").val(item.class_name);
+      $("#shift_name").val(item.shift_name);
     }
 
     function changeStatus (id) {
-      const uri = '/configuration/class/toggle-status';  
+      const uri = '/configuration/shift/toggle-status';
       toggleStatus(uri, id)
     }
     
