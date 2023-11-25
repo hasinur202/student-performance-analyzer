@@ -13,7 +13,11 @@ class InstituteInfoController extends Controller
 {
     public function index()
     {
+        $insId = session('institute_id') ? session('institute_id') : null;
         $data = InstituteInfo::with('admin:id,name')
+        ->when($insId, function ($q) use ($insId) {
+            $q->where('id', $insId);
+        })
         ->orderBy('sorting_order', 'asc')->get();
         return view('backend.institute-info.list', ['data' => $data]);
     }
