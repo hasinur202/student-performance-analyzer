@@ -25,18 +25,18 @@ class Teacher extends Model
         static::creating(function ($model) {
             $model->created_by = auth()->user()->id;
             $model->updated_by = auth()->user()->id;
-            $model->auto_id = self::generateAutoId($model);
+            $model->auto_id = 'T-'.$model->institute_id.$model->year.$model->user_id;
         });
         static::updating(function ($model) {
             $model->updated_by = auth()->user()->id;
         });
     }
 
-    public function generateAutoId($model)
-    {
-        $autoId = 'T-'.$model->institute_id.$model->year.$model->user_id;
-        return $autoId;
-    }
+    // public function generateAutoId($model)
+    // {
+    //     $autoId = 'T-'.$model->institute_id.$model->year.$model->user_id;
+    //     return $autoId;
+    // }
 
     public function institute ()
     {
