@@ -74,7 +74,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="form-label">Class <span class="text-danger">*</span></label>
-                        <select onchange="getClassWiseList(this.value, {{ $groupList }}, {{ $sectionList }}, {{ $subjectList }})" class="form-control" name="class_id" aria-label="Default select example">
+                        <select onchange="getClassWiseList(this.value, {{ $groupList }}, {{ $sectionList }}, {{ $subjectList }})" class="form-control" id="class_id" name="class_id" aria-label="Default select example">
                           <option selected value="">Select</option>
                           @foreach ($classList as $item)
                             <option value="{{ $item->id }}">{{ $item->class_name }}</option>
@@ -86,7 +86,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="form-label">Group</label>
-                        <select onchange="getGroupWiseSection(this.value, {{ $sectionList }})" class="form-control" name="group_id" id="group_id" aria-label="Default select example">
+                        <select onchange="getGroupWiseSection(this.value, {{ $sectionList }}, {{ $subjectList }})" class="form-control" name="group_id" id="group_id" aria-label="Default select example">
                           <option selected='selected' value="">Select</option>
                         </select>
                       </div>
@@ -150,7 +150,42 @@
         format: 'L'
     });
 
+    function getGroupWiseSection (id, sectionList, subjectList) {
+      if (id) {
+        // Group Wise Section Load
+        const tmpSectionList = sectionList.filter(el => {
+          if (el.group_id) {
+            return el.group_id == id;
+          }
+        });
+  
+        $('#section_id').text('');
+        $('#section_id').append("<option selected='selected' hidden value=''>Select</option>");
+        tmpSectionList.forEach(function (item) {
+            $('#section_id').append("<option value='"+item.id+"'>"+item.section_name+"</option>");
+        });
+  
+        // Group Wise Subject load
+        const tmpSubjectList = subjectList.filter(el => {
+          if (el.group_id) {
+            return el.group_id == id;
+          }
+        });
+        $('#subject_id').text('');
+        $('#subject_id').append("<option selected='selected' value='' hidden>Select</option>");
+        tmpSubjectList.forEach(function (item) {
+            $('#subject_id').append("<option value='"+item.id+"'>"+item.subject_name+"</option>");
+        });
+      } else {
+        const classId = $('#class_id').val();
+        const groupList = @json($groupList);
+        getClassWiseList(classId, groupList, sectionList, subjectList);
+      }
+    }
+
+
     function getClassWiseList (id, groupList, sectionList, subjectList) {
+      // Class Wise Group Load
       const tmpGroupList = groupList.filter(el => el.class_id == id);
       
       if (tmpGroupList.length) {
@@ -162,7 +197,7 @@
             $('#group_id').append("<option value='"+item.id+"'>"+item.group_name+"</option>");
         });
       }
-
+      // Class Wise Section Load
       const tmpSectionList = sectionList.filter(el => el.class_id == id);
       if (tmpSectionList.length) {
         $('#section_id').text('');
@@ -171,7 +206,7 @@
             $('#section_id').append("<option value='"+item.id+"'>"+item.section_name+"</option>");
         });
       }
-
+      // Class Wise Subject Load
       const tmpSubjectList = subjectList.filter(el => el.class_id == id);
       if (tmpSubjectList.length) {
         $('#subject_id').text('');
@@ -180,20 +215,6 @@
             $('#subject_id').append("<option value='"+item.id+"'>"+item.subject_name+"</option>");
         });
       }
-    }
-
-    function getGroupWiseSection (id, sectionList) {
-      const tmpSectionList = sectionList.filter(el => {
-        if (el.group_id) {
-          return el.group_id == id;
-        }
-      });
-
-        $('#section_id').text('');
-        $('#section_id').append("<option selected='selected' hidden value=''>Select</option>");
-        tmpSectionList.forEach(function (item) {
-            $('#section_id').append("<option value='"+item.id+"'>"+item.section_name+"</option>");
-        });
     }
 
   </script>

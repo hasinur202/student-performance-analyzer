@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Helpers\FileUploadHelper;
 use App\Http\Controllers\Controller;
 use App\Models\AssignClassTeacher;
 use App\Models\MasterGroup;
 use App\Models\MasterSection;
 use App\Models\MasterSubject;
 use App\Models\Teacher;
-use App\Models\User;
 use App\Services\CommonDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\Hash;
 
 class ClassTeacherController extends Controller
 {
@@ -75,10 +72,41 @@ class ClassTeacherController extends Controller
     // Product Edit 
     public function edit ($id) {
         if ($id) {
-            $data = Teacher::find($id);
+            $data = AssignClassTeacher::find($id);
             if ($data) {
+                $insId = session('institute_id') ? session('institute_id') : null;
                 $instituteList = CommonDataService::instituteList();
-                return view('backend.class-teacher.edit', [ 'data' => $data, 'instituteList' => $instituteList ]);
+                $teacherList = CommonDataService::teacherList();
+                $classList = CommonDataService::classList();
+                $shiftList = CommonDataService::shiftList();
+
+                $groupList = MasterGroup::when($insId, function ($q) use ($insId) {
+                    $q->where('institute_id', $insId);
+                })
+                ->get();
+
+                $sectionList = MasterSection::when($insId, function ($q) use ($insId) {
+                    $q->where('institute_id', $insId);
+                })
+                ->get();
+
+                $subjectList = MasterSubject::when($insId, function ($q) use ($insId) {
+                    $q->where('institute_id', $insId);
+                })
+                ->get();
+
+                return view('backend.class-teacher.edit', [
+                    'data' => $data,
+                    'instituteList' => $instituteList,
+                    'teacherList' => $teacherList,
+                    'classList' => $classList,
+                    'shiftList' => $shiftList,
+                    'groupList' => $groupList,
+                    'sectionList' => $sectionList,
+                    'subjectList' => $subjectList,
+                    'institute_id' => $insId ?? 0
+                ]);
+
             }
         }
         Alert::error('Something went wrong!', 'Please Try Again.');
@@ -124,34 +152,6 @@ class ClassTeacherController extends Controller
                 'errors'  => $ex->getMessage()
             ]);
         }
-    }
-
-    public function createUser ($data, $userId = 0)
-    {
-        $userData['name'] = $data['name'];
-        $userData['email'] = $data['email'];
-        $userData['username'] = $data['email'];
-        $userData['type'] = 3; // 3 means teacher
-        $userData['password'] = Hash::make('123456');
-        $userData['mobile_no'] = $data['mobile_no'];
-        $userData['address'] = $data['address'];
-        $userData['photo'] = $data['photo'] ?? null;
-
-        if ($userId) {
-            $exist = User::find($userId);
-            $exist->name = $data['name'];
-            $exist->email = $data['email'];
-            $exist->username = $data['email'];
-            $exist->address = $data['address'];
-            $exist->photo = $data['photo'] ?? $exist->photo;
-            $exist->mobile_no = $data['mobile_no'];
-            $exist->update();
-
-            return $exist;
-        }
-
-        $user = User::create($userData);
-        return $user;
     }
 
 
