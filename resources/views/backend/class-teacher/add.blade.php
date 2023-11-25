@@ -156,7 +156,7 @@
       if (tmpGroupList.length) {
         console.log('tmpGroupList', tmpGroupList);
         $('#group_id').text('');
-        $('#group_id').append("<option selected='selected'>Select</option>");
+        $('#group_id').append("<option selected='selected' value=''>Select</option>");
         tmpGroupList.forEach(function (item) {
           console.log('item', item)
             $('#group_id').append("<option value='"+item.id+"'>"+item.group_name+"</option>");
@@ -166,7 +166,7 @@
       const tmpSectionList = sectionList.filter(el => el.class_id == id);
       if (tmpSectionList.length) {
         $('#section_id').text('');
-        $('#section_id').append("<option selected='selected' hidden>Select</option>");
+        $('#section_id').append("<option selected='selected' value='' hidden>Select</option>");
         tmpSectionList.forEach(function (item) {
             $('#section_id').append("<option value='"+item.id+"'>"+item.section_name+"</option>");
         });
@@ -175,7 +175,7 @@
       const tmpSubjectList = subjectList.filter(el => el.class_id == id);
       if (tmpSubjectList.length) {
         $('#subject_id').text('');
-        $('#subject_id').append("<option selected='selected' hidden>Select</option>");
+        $('#subject_id').append("<option selected='selected' value='' hidden>Select</option>");
         tmpSubjectList.forEach(function (item) {
             $('#subject_id').append("<option value='"+item.id+"'>"+item.subject_name+"</option>");
         });
@@ -190,7 +190,7 @@
       });
 
         $('#section_id').text('');
-        $('#section_id').append("<option selected='selected' hidden>Select</option>");
+        $('#section_id').append("<option selected='selected' hidden value=''>Select</option>");
         tmpSectionList.forEach(function (item) {
             $('#section_id').append("<option value='"+item.id+"'>"+item.section_name+"</option>");
         });
