@@ -86,7 +86,7 @@
               </p>
             </a>
           </li>
-          @endcan
+          
           <li class="nav-item">
             <a href="{{ route('backend.class_teacher') }}" class="nav-link {{ $route == 'backend.class_teacher' ? 'active' : '' }}">
                <i class="nav-icon fas fa-tasks"></i>
@@ -95,10 +95,12 @@
               </p>
             </a>
           </li>
+          @endcan
+
 
           @can('isParent')
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('backend.parents') }}" class="nav-link {{ $route == 'backend.parents' ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-friends"></i>
               <p>
                 Parents
@@ -108,13 +110,43 @@
           @endcan
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('backend.student') }}" class="nav-link {{ $route == 'backend.student' ? 'active' : '' }}">
               <i class='nav-icon fas fa-user-graduate'></i>
               <p>
                 Students
               </p>
             </a>
           </li>
+
+          @can('isAdmin')
+          <li class="nav-item">
+            <a href="{{ route('backend.attribute') }}" class="nav-link {{ $route == 'backend.attribute' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-sitemap fa-fw"></i>
+              <p>
+                Performance Attributes
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('backend.indicator') }}" class="nav-link {{ $route == 'backend.indicator' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-link"></i>
+              <p>
+                Evaluating Indicators
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('backend.marks-settings') }}" class="nav-link {{ $route == 'backend.marks-settings' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-tasks"></i>
+              <p>
+                Marks Settings
+              </p>
+            </a>
+          </li>
+          @endcan
+          
 
         @can('isAdmin')
           <li class="nav-item {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject' || $route == 'backend.shift') ? 'menu-is-openning menu-open' : '' }}">

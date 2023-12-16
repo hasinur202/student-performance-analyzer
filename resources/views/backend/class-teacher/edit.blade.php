@@ -38,6 +38,7 @@
               <!-- form start -->
               <form id="handleFormSubmit">
                 @csrf
+                <input type="text" hidden name="id" value="{{ $data->id }}" id="id">
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-4">
@@ -74,7 +75,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="form-label">Class <span class="text-danger">*</span></label>
-                        <select onchange="getClassWiseList(this.value, {{ $groupList }}, {{ $sectionList }}, {{ $subjectList }})" class="form-control" name="class_id" aria-label="Default select example">
+                        <select onchange="getClassWiseList(this.value)" class="form-control" name="class_id" aria-label="Default select example">
                           <option selected value="">Select</option>
                           @foreach ($classList as $item)
                             <option value="{{ $item->id }}" {{ $data->class_id == $item->id ? 'selected' : '' }}>{{ $item->class_name }}</option>
@@ -86,7 +87,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="form-label">Group</label>
-                        <select onchange="getGroupWiseSection(this.value, {{ $sectionList }})" class="form-control" name="group_id" id="group_id" aria-label="Default select example">
+                        <select onchange="getGroupWiseSection(this.value)" class="form-control" name="group_id" id="group_id" aria-label="Default select example">
                           <option selected='selected' value="">Select</option>
                         </select>
                       </div>
@@ -150,62 +151,95 @@
         format: 'L'
     });
 
-    $(function () {
-      const classId = $('#class_id').val();
+    function getGroupWiseSection (id) {
+      const sectionList = @json($sectionList);
+      const subjectList = @json($subjectList);
+      
+      if (id) {
+        const sectionId = @json($data->section_id);
+        const subjectId = @json($data->subject_id);
+        console.log('subjectId', subjectId);
+        // Group Wise Section Load
+        const tmpSectionList = sectionList.filter(el => {
+          if (el.group_id) {
+            return el.group_id == id;
+          }
+        });
+  
+        $('#section_id').text('');
+        $('#section_id').append("<option selected='selected' hidden value=''>Select</option>");
+        tmpSectionList.forEach(function (item) {
+            $('#section_id').append("<option " + (item.id == sectionId ? 'selected' : '') + " value='"+item.id+"'>"+item.section_name+"</option>");
+        });
+  
+        // Group Wise Subject load
+        const tmpSubjectList = subjectList.filter(el => {
+          if (el.group_id) {
+            return el.group_id == id;
+          }
+        });
+        $('#subject_id').text('');
+        $('#subject_id').append("<option selected='selected' value='' hidden>Select</option>");
+        tmpSubjectList.forEach(function (item) {
+            $('#subject_id').append("<option " + (item.id == subjectId ? 'selected' : '') + " value='"+item.id+"'>"+item.subject_name+"</option>");
+        });
+      } else {
+        const classId = $('#class_id').val();
+        const groupList = @json($groupList);
+        getClassWiseList(classId);
+      }
+    }
 
+
+    function getClassWiseList (id) {
       const groupList = @json($groupList);
       const sectionList = @json($sectionList);
+      const subjectList = @json($subjectList);
 
-      // const list =  @json($subCategoryList);
-      // const subId = @json($data->sub_category_id);
-      // getSubCategory(Id, list, subId)
-    });
+      const groupId = @json($data->group_id);
+      const sectionId = @json($data->section_id);
+      const subjectId = @json($data->subject_id);
 
-    function getClassWiseList (id, groupList, sectionList, subjectList) {
+      // Class Wise Group Load
       const tmpGroupList = groupList.filter(el => el.class_id == id);
       
       if (tmpGroupList.length) {
-        console.log('tmpGroupList', tmpGroupList);
         $('#group_id').text('');
         $('#group_id').append("<option selected='selected' value=''>Select</option>");
         tmpGroupList.forEach(function (item) {
-          console.log('item', item)
-            $('#group_id').append("<option value='"+item.id+"'>"+item.group_name+"</option>");
+            $('#group_id').append("<option " + (item.id == groupId ? 'selected' : '') + " value='"+item.id+"'>"+item.group_name+"</option>");
         });
       }
-
+      // Class Wise Section Load
       const tmpSectionList = sectionList.filter(el => el.class_id == id);
       if (tmpSectionList.length) {
         $('#section_id').text('');
         $('#section_id').append("<option selected='selected' value='' hidden>Select</option>");
         tmpSectionList.forEach(function (item) {
-            $('#section_id').append("<option value='"+item.id+"'>"+item.section_name+"</option>");
+            $('#section_id').append("<option " + (item.id == sectionId ? 'selected' : '') + " value='"+item.id+"'>"+item.section_name+"</option>");
         });
       }
-
+      // Class Wise Subject Load
       const tmpSubjectList = subjectList.filter(el => el.class_id == id);
       if (tmpSubjectList.length) {
         $('#subject_id').text('');
         $('#subject_id').append("<option selected='selected' value='' hidden>Select</option>");
         tmpSubjectList.forEach(function (item) {
-            $('#subject_id').append("<option value='"+item.id+"'>"+item.subject_name+"</option>");
+            $('#subject_id').append("<option " + (item.id == subjectId ? 'selected' : '') + " value='"+item.id+"'>"+item.subject_name+"</option>");
         });
       }
     }
 
-    function getGroupWiseSection (id, sectionList) {
-      const tmpSectionList = sectionList.filter(el => {
-        if (el.group_id) {
-          return el.group_id == id;
-        }
-      });
 
-        $('#section_id').text('');
-        $('#section_id').append("<option selected='selected' hidden value=''>Select</option>");
-        tmpSectionList.forEach(function (item) {
-            $('#section_id').append("<option value='"+item.id+"'>"+item.section_name+"</option>");
-        });
-    }
+    $(document).ready(function() {
+      const classId = @json($data->class_id);
+      getClassWiseList(classId);
+
+      const groupId = @json($data->group_id);
+      if (groupId) {
+        getGroupWiseSection(groupId);
+      }
+    });
 
   </script>
   <script src="{{asset('/backend/custom-js/assign-teacher.js')}}"></script>

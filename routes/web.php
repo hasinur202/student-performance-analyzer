@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DownloadController;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,15 +33,31 @@ Route::get('/version', function () {
 Route::get('/download-attachment', [DownloadController::class, 'downloadFile']);
 
 
-Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Frontend'], function() {  
-    // Home
-    Route::get('/', 'HomeController@index')->name('frontend.home');
+Route::get('/download-excel', function () {
+    $filePath = public_path('sample-excel/student.xlsx');
 
-    // Register
-    Route::get('/register', 'RegisterController@index')->name('frontend.register');
-});
+    return Response::download($filePath, 'student.xlsx');
+})->name('download.student.excel');
+
+
 
 Route::group(['middleware' =>['guest']], function () {
+    Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Frontend'], function() {  
+        // Home
+        Route::get('/', 'HomeController@index')->name('frontend.home');
+
+        //password reset
+        Route::get('/reset/password', 'PasswordResetController@password_reset')->name('password.reset');
+        Route::post('/email-password/reset', 'PasswordResetController@resetPassword')->name('email.reset');
+        Route::get('/reset/new-password/{verified_at}', 'PasswordResetController@resetForm');
+        Route::post('/update/password', 'PasswordResetController@updatePassword')->name('password.update');
+
+        // verify mail
+        Route::get('/verify/{token}', 'PasswordResetController@verify')->name('mail.verify');
+    });
+
+
+    // unused
     Route::group(['prefix'=>'/admin', 'namespace' => 'App\Http\Controllers\Auth'], function() {  
         // Login
         Route::get('/login', 'LoginController@index')->name('auth.login');
@@ -53,6 +70,8 @@ Route::group(['middleware' =>['guest']], function () {
     });
 
 });
+// end unused
+
 
 Route::group(['middleware' => ['auth']], function () {
 

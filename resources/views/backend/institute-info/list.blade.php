@@ -67,7 +67,14 @@
                           {{ $item->inst_name }}
                       </td>
                       <td class="text-center">{{ $item->admin->name }}</td>
-                      <td class="text-center">{{ $item->email }}</td>
+                      <td>
+                          {{ $item->email }}<br>
+                          @if($item->email_verified_at == null)
+                            <span class="badge badge-success">verified</span>
+                          @else
+                            <span class="badge badge-warning">Not verified</span>
+                          @endif
+                      </td>
                       <td class="text-center">{{ $item->phone }}</td>
                       <td class="text-center">{!! $item->sorting_order !!}</td>
                       <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
@@ -79,10 +86,10 @@
                         @endif                            
                       </td>
                       <td class="text-center">
-                        <button onclick="viewDetails({{ $item }})" class="btn btn-outline-info btn-md"><i class="fas fa-eye"></i></button>
+                        <button onclick="viewDetails({{ $item }})" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></button>
                         @can('isSuperAdmin')
-                            <a href="{{ url('/institute-info/edit/'.$item->id) }}" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></a>
-                            <button onclick="changeStatus({{ $item->id }})" type="button" class="btn {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
+                            <a href="{{ url('/institute-info/edit/'.$item->id) }}" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></a>
+                            <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-sm {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
                               <i class="fas fa-toggle-{{ $item->status == 1 ? 'on' : 'off' }}"></i>
                             </button>
                         @endcan

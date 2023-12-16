@@ -43,6 +43,18 @@ Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Backend'], fun
         Route::post('/toggle-status', 'InstituteInfoController@changeStatus');
     });
 
+    // Marks Settings Routes
+    Route::group(['prefix' => 'marks-settings'], function () {
+        Route::get('/list', 'MarksSettingsController@index')->name('backend.marks-settings');
+        Route::get('/add', 'MarksSettingsController@add')->name('backend.marks-settings.add');
+        Route::get('/edit/{id}', 'MarksSettingsController@edit');
+        Route::get('/show/{id}', 'MarksSettingsController@show');
+        Route::get('/view/{id}', 'MarksSettingsController@view');
+        Route::post('/store', 'MarksSettingsController@store');
+        
+        Route::post('/toggle-status', 'MarksSettingsController@changeStatus');
+    });
+
     // Teacher Routes
     Route::group(['prefix' => 'teacher'], function () {
         Route::get('/list', 'TeacherController@index')->name('backend.teacher');
@@ -50,6 +62,27 @@ Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Backend'], fun
         Route::get('/edit/{id}', 'TeacherController@edit')->name('backend.teacher.edit');
         Route::post('/store', 'TeacherController@store');
         Route::post('/toggle-status', 'TeacherController@changeStatus');
+    });
+
+    // Parents Routes
+    Route::group(['prefix' => 'parents'], function () {
+        Route::get('/list', 'ParentsController@index')->name('backend.parents');
+        Route::get('/add', 'ParentsController@add')->name('backend.parents.add');
+        Route::get('/edit/{id}', 'ParentsController@edit')->name('backend.parents.edit');
+        Route::post('/store', 'ParentsController@store');
+        Route::post('/toggle-status', 'ParentsController@changeStatus');
+    });
+
+     // Student Routes
+     Route::group(['prefix' => 'student'], function () {
+        Route::get('/list', 'StudentController@index')->name('backend.student');
+        Route::get('/add', 'StudentController@add')->name('backend.student.add');
+        Route::get('/import-excel', 'StudentController@addExcel')->name('backend.student.excel');
+        Route::get('/edit/{id}', 'StudentController@edit')->name('backend.student.edit');
+        Route::post('/store', 'StudentController@store');
+        Route::post('/toggle-status', 'StudentController@changeStatus');
+        // Excel Import
+        Route::post('/import-excel', 'ExcelImportController@importStudentExcel')->name('backend.student.import-excel');
     });
 
     // Teacher Routes
@@ -61,6 +94,20 @@ Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Backend'], fun
         Route::post('/toggle-status', 'ClassTeacherController@changeStatus');
     });
 
+    // Performance Attribute routes
+    Route::group(['prefix' => 'performance-attribute'], function () {
+        Route::get('/list', 'PerformanceAttributeController@index')->name('backend.attribute');
+        Route::post('/store', 'PerformanceAttributeController@store');
+        Route::post('/toggle-status', 'PerformanceAttributeController@changeStatus');
+    });
+
+    // Evaluating Indicator routes
+    Route::group(['prefix' => 'evaluating-indicator'], function () {
+        Route::get('/list', 'EvaluatingIndicatorController@index')->name('backend.indicator');
+        Route::post('/store', 'EvaluatingIndicatorController@store');
+        Route::post('/toggle-status', 'EvaluatingIndicatorController@changeStatus');
+    });
+    
     /** ==================== Configuration =================== */
     Route::group(['prefix' => 'configuration'], function () {
         // Master Class routes
@@ -97,6 +144,23 @@ Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Backend'], fun
             Route::post('/store', 'MasterShiftController@store');
             Route::post('/toggle-status', 'MasterShiftController@changeStatus');
         });
+    });
+
+
+    /** Common API */
+     // Institute Info Routes
+     Route::group(['prefix' => 'common-api'], function () {
+        Route::get('/institutes', 'CommonApiController@instituteList');
+        Route::get('/classes', 'CommonApiController@classList');
+        Route::get('/groups', 'CommonApiController@groupList');
+        Route::get('/sections', 'CommonApiController@sectionList');
+        Route::get('/shifts', 'CommonApiController@shiftList');
+
+        Route::get('/class-wise-subjects', 'CommonApiController@classWiseSubject');
+        Route::get('/class-wise-students', 'CommonApiController@classWiseStudent');
+        Route::get('/indicators', 'CommonApiController@indicators');
+
+        Route::get('/subject-wise-total-marks', 'CommonApiController@subjectWiseSettingsMarks');
     });
 
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Actions\MailSendAction;
 use App\Helpers\FileUploadHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class TeacherController extends Controller
 {
@@ -96,10 +98,13 @@ class TeacherController extends Controller
                 $model->update($all_data);
             } else {
                 $user = $this->createUser($all_data);
-                if ($user) {
-                    $all_data['user_id'] = $user->id;
+                $all_data['user_id'] = $user->id;
+                $teacher = Teacher::create($all_data);
+
+                if ($teacher) {
+                    /** Mail Send to Teachers email */
+                    (new MailSendAction())->handle($user, 'mail.verification');
                 }
-                Teacher::create($all_data);
             }
 
             DB::commit();
@@ -121,15 +126,6 @@ class TeacherController extends Controller
 
     public function createUser ($data, $userId = 0)
     {
-        $userData['name'] = $data['name'];
-        $userData['email'] = $data['email'];
-        $userData['username'] = $data['email'];
-        $userData['type'] = 3; // 3 means teacher
-        $userData['password'] = Hash::make('123456');
-        $userData['mobile_no'] = $data['mobile_no'];
-        $userData['address'] = $data['address'];
-        $userData['photo'] = $data['photo'] ?? null;
-
         if ($userId) {
             $exist = User::find($userId);
             $exist->name = $data['name'];
@@ -142,7 +138,16 @@ class TeacherController extends Controller
 
             return $exist;
         }
-
+        
+        $userData['name'] = $data['name'];
+        $userData['email'] = $data['email'];
+        $userData['username'] = $data['email'];
+        $userData['type'] = 3; // 3 means teacher
+        $userData['password'] = Hash::make('123456');
+        $userData['mobile_no'] = $data['mobile_no'];
+        $userData['address'] = $data['address'];
+        $userData['photo'] = $data['photo'] ?? null;
+        $userData['email_verified_at'] = Str::random(32);
         $user = User::create($userData);
         return $user;
     }

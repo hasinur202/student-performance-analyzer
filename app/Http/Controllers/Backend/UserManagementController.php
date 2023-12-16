@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Actions\MailSendAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserManagementController extends Controller
 {
@@ -45,27 +48,43 @@ class UserManagementController extends Controller
   
         if (!$id) {
             $all_data['password'] = Hash::make($data['password']);
+            $all_data['email_verified_at'] = Str::random(32);;
         } else {
             unset($all_data['password']);
         }
 
-        if ($id) {
-            $data = $model->update($all_data);
-        } else {
-            $data = User::create($all_data);
-        }
+        try {
+            DB::beginTransaction();
 
-        if ($data) {
-            return response()->json([
-                'success' => true,
-                'message' => $id ? 'Updated Successfully.' : 'Added Successfully.',
-                'data' => $data
-            ], 200);
-        } else {
+            if ($id) {
+                $data = $model->update($all_data);
+            } else {
+                $data = User::create($all_data);
+                /** Mail Send to Teachers email */
+                (new MailSendAction())->handle($data, 'mail.verification');
+            }
+
+            DB::commit();
+            if ($data) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $id ? 'Updated Successfully.' : 'Added Successfully.',
+                    'data' => $data
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Something Went Wrong! Please Try Again.'
+                ], 500);
+            }
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Something Went Wrong! Please Try Again.'
-            ], 500);
+                'message' => 'Failed to save data.',
+                'errors'  => $ex->getMessage()
+            ]);
         }
     }
 

@@ -3,7 +3,7 @@
 <html class="no-js">
 <head>
     <meta charset="utf-8">
-    <title>Student Performance Analyzer</title>
+    <title>{{ \App\Helpers\CustomHelper::MY_APP_NAME() }}</title>
     <!--=================================
     Meta tags
     =================================-->
@@ -26,21 +26,6 @@
 <!--====================================
 Body Content
 =======================================-->
-<div class="navbar-custom">
-    <div class="container">
-        <a href="/" class="logo"><img src="/frontend/demo-data/logo.jpg" alt="logo"></a>
-        <nav id="navbar">
-            <a href="#" class="nav-triger"><span class="fa fa-navicon"></span></a>
-            <ul class="main-menu nav">
-                <!-- <li><a href="#section0">Home</a></li> -->
-                <!-- <li><a href="#">School Registration</a></li>
-                <li><a href="#section1">Student Registration</a></li> -->
-            </ul>
-        </nav>
-
-    </div>
-</div>
-
 <section id="section0" class="header">
     <div class="container">
         <div class="headerInner">
@@ -59,7 +44,7 @@ Body Content
                             <input type="password" name="password" placeholder="Password" required style="margin-bottom: 0px;">
                         </div>
 
-                        <a style="font-size:1.4rem;float:left" href="#">Forgot Password?</a>
+                        <a style="font-size:1.4rem;float:left" href="{{ route('password.reset') }}">Forgot Password?</a>
 
                         <div style="width:100%;margin-bottom:20rem">
                             <button style="float:right" type="submit" class="btn btn-default mt-20 btn-head mb-50">Sign In</button>
@@ -80,42 +65,18 @@ Body Content
         </div>
         <div class="row courses top">
 
-            <div class="col-sm-4 course text-bold clearfix">
-                <a href="#">
-                    <figure class="pull-left mt-10"><img alt="" style="width: 75px; height: 75px" src="/frontend/demo-data/school3.PNG"></figure>
-                </a>
-                <div class="info">
-                    <a href="#">
-                        <h5>Schoolartika New School</h5>
+            @foreach ($data as $item)
+                <div class="col-sm-4 course text-bold clearfix">
+                    <a href="javascript:void(0)">
+                        <figure class="pull-left mt-10"><img alt="" style="width: 75px; height: 75px" src="/storage/{{ $item->logo }}"></figure>
                     </a>
-                    <p>Mohakhali, Dhaka, Bangladesh.</p>
+                    <div class="info">
+                        <a href="javascript:void(0)"><h5>{{ $item->inst_name }}</h5></a>
+                        <p>{{ $item->address }}</p>
+                        <p style="font-size: 9px;">Rank- {{ $item->sorting_order }}</p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="col-sm-4 course text-bold clearfix">
-                <a href="#">
-                    <figure class="pull-left mt-10"><img alt="" style="width: 75px; height: 75px" src="/frontend/demo-data/school.png"></figure>
-                </a>
-                <div class="info">
-                    <a href="#">
-                        <h5>Ideal School</h5>
-                    </a>
-                    <p>Mirpur-1, Dhaka, Bangladesh.</p>
-                </div>
-            </div>
-
-            <div class="col-sm-4 course text-bold clearfix">
-                <a href="#">
-                    <figure class="pull-left mt-10"><img alt="" style="width: 75px; height: 75px" src="/frontend/demo-data/bsckbone.png"></figure>
-                </a>
-                <div class="info">
-                    <a href="#">
-                        <h5>Mohammadpur Boys School</h5>
-                    </a>
-                    <p>Mohammadpur, Dhaka, Bangladesh.</p>
-                </div>
-            </div>
-
+            @endforeach
         </div>
     </div>
 </section>
@@ -173,9 +134,14 @@ Body Content
                     text: result.message
                 })
 
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2500);
+
                 $.each(result.errors, function(field_name, error){
                     $(document).find('[name='+field_name+']').after('<div class="w-100" style="color:red; font-size:14px;">' +error+ '</div>')
                 })
+
               }
           })
       });

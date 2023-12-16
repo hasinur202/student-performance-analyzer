@@ -63,7 +63,14 @@
                       <td>{{ $item->name }}</td>
                       <!-- <td>{{ $item->username }}</td> -->
                       <td>{{ $item->mobile_no }}</td>
-                      <td>{{ $item->email }}</td>
+                      <td>
+                          {{ $item->email }}<br>
+                          @if($item->email_verified_at == null)
+                            <span class="badge badge-success">verified</span>
+                          @else
+                            <span class="badge badge-warning">Not verified</span>
+                          @endif
+                      </td>
                       <td>{{ $item->address }}</td>
                       <td class="text-center">
                         @if($item->status == 1)
@@ -74,11 +81,11 @@
                       </td>
                       <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
                       <td class="text-center">
-                        <button onclick="edit({{ $item }})" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></button>
+                        <button onclick="edit({{ $item }})" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></button>
                         @if($item->status == 1)
-                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-success"><i class="fas fa-toggle-on"></i></button>
+                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-success btn-sm"><i class="fas fa-toggle-on"></i></button>
                         @else
-                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-danger"></i> <i class="fas fa-toggle-off"></i></button>
+                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-danger btn-sm"></i> <i class="fas fa-toggle-off"></i></button>
                         @endif
                       </td>
                     </tr>

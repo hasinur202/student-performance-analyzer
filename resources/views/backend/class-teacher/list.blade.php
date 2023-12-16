@@ -47,22 +47,26 @@
                   <thead>
                     <tr class="text-center">
                       <th width="7%">SL No.</th>
+                      <th>Year</th>
                       <th>Teacher</th>
                       <th>Class</th>
                       <th>Group</th>
                       <th>Section</th>
                       <th>Subject</th>
                       <th>Shift</th>
-                      <th>Institute Admin</th>
+                      <th>Institute</th>
                       <th width="10%">Created At</th>
                       <!-- <th width="10%">Status</th> -->
+                      @can('isAdmin')
                       <th width="12%">Action</th>
+                      @endcan
                     </tr>
                   </thead>
                   <tbody>
                     @foreach($data as $key => $item)
                     <tr>
                       <td class="text-center">{{ $key + 1 }}</td>
+                      <td class="text-center">{{ $item->year }}</td>
                       <td>
                           {{ $item->teacher->user->name }}
                       </td>
@@ -80,14 +84,11 @@
                           <span class="badge badge-danger">Inactive</span>
                         @endif                            
                       </td> -->
+                      @can('isAdmin')
                       <td class="text-center">
-                        @can('isAdmin')
-                        <a href="{{ url('/class-teacher/edit/'.$item->id) }}" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></a>
-                        <!-- <button onclick="changeStatus({{ $item->id }})" type="button" class="btn {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
-                          <i class="fas fa-toggle-{{ $item->status == 1 ? 'on' : 'off' }}"></i>
-                        </button> -->
-                        @endcan
+                        <a href="{{ url('/class-teacher/edit/'.$item->id) }}" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></a>
                       </td>
+                      @endcan
                     </tr>
                     @endforeach
                   </tbody>
@@ -130,7 +131,19 @@
       $("#example1").DataTable({
         "responsive": true, "lengthChange": false, "autoWidth": false,
         // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        "buttons": ["pdf", "print", "colvis"]
+        "buttons": [
+          {
+              extend: 'pdf',
+              text: 'PDF',
+              orientation: 'landscape', // Set the orientation to landscape
+              exportOptions: {
+                modifier: {
+                  page: 'current',
+                },
+              },
+          },
+          "print", "colvis"
+        ]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
 

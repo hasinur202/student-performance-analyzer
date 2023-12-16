@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->tinyInteger('type')->default(0)->comment('1=Super Admin, 2=Admin, 3=Teacher, 4=Parent, 5=Student');
             $table->tinyInteger('status')->default(0)->comment('1=Active, 0=Inactive');
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

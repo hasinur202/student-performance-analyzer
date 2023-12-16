@@ -29,7 +29,7 @@ class ClassTeacherController extends Controller
             $q->where('teacher_id', $teacherId);
         })
 
-        ->orderBy('id', 'desc')->get();
+        ->orderBy('year', 'desc')->get();
 
         return view('backend.class-teacher.list', ['data' => $data]);
     }

@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'username', 'photo', 'mobile_no', 'password', 'type', 'address',
+        'name', 'email', 'username', 'photo', 'mobile_no', 'password', 'type', 'address', 'email_verified_at',
     ];
 
     /**
@@ -27,15 +27,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
     ];
 
     public function hasRole($role)
@@ -53,5 +44,11 @@ class User extends Authenticatable
             $roleId = 5;
         }
         return $this->type === $roleId ? true : false;
+    }
+
+
+    public function students ()
+    {
+        return $this->hasMany(Student::class, 'user_id');
     }
 }

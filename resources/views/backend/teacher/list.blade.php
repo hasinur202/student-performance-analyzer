@@ -51,7 +51,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>Phone/Mobile</th>
-                      <th>Institute Admin</th>
+                      <th>Institute</th>
                       <th width="10%">Created At</th>
                       <th width="10%">Status</th>
                       <th width="12%">Action</th>
@@ -67,7 +67,14 @@
                                   src="/storage/{{ $item->user->photo }}" alt="Photo">
                           {{ $item->user->name }}
                       </td>
-                      <td class="text-center">{{ $item->user->email }}</td>
+                      <td>
+                          {{ $item->user->email }}<br>
+                          @if($item->user->email_verified_at == null)
+                            <span class="badge badge-success">verified</span>
+                          @else
+                            <span class="badge badge-warning">Not verified</span>
+                          @endif
+                      </td>
 
                       <td class="text-center">{{ $item->user->mobile_no }}</td>
                       <td class="text-center">{{ $item->institute->inst_name }}</td>
@@ -80,10 +87,10 @@
                         @endif                            
                       </td>
                       <td class="text-center">
-                        <button onclick="viewDetails({{ $item }})" class="btn btn-outline-info btn-md"><i class="fas fa-eye"></i></button>
+                        <button onclick="viewDetails({{ $item }})" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></button>
                         @can('isAdmin')
-                        <a href="{{ url('/teacher/edit/'.$item->id) }}" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></a>
-                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
+                        <a href="{{ url('/teacher/edit/'.$item->id) }}" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></a>
+                        <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-sm {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
                           <i class="fas fa-toggle-{{ $item->status == 1 ? 'on' : 'off' }}"></i>
                         </button>
                         @endcan

@@ -69,11 +69,11 @@
                           @endif                            
                         </td>
                         <td class="text-center">
-                          <button onclick="edit({{ $item }}, {{ $instituteList }}, {{ $classList }})" class="btn btn-outline-primary btn-md"><i class="far fa-edit"></i></button>
+                          <button onclick="edit({{ $item }}, {{ $instituteList }}, {{ $classList }})" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></button>
                           @if($item->status == 1)
-                          <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-success"><i class="fas fa-toggle-on"></i></button>
+                          <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-success btn-sm"><i class="fas fa-toggle-on"></i></button>
                           @else
-                          <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-danger"></i> <i class="fas fa-toggle-off"></i></button>
+                          <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-outline-danger btn-sm"></i> <i class="fas fa-toggle-off"></i></button>
                           @endif
                         </td>
                       </tr>
