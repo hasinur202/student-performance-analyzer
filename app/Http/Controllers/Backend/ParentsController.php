@@ -149,7 +149,7 @@ class ParentsController extends Controller
         $userData['name'] = $data['name'];
         $userData['email'] = $data['email'];
         $userData['username'] = $data['email'];
-        $userData['type'] = 3; // 3 means teacher
+        $userData['type'] = 4; // 3 means teacher
         $userData['password'] = Hash::make('123456');
         $userData['mobile_no'] = $data['mobile_no'];
         $userData['address'] = $data['address'];
