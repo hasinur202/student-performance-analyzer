@@ -12,12 +12,6 @@
             <table class="table table-borderless">
                 <tbody>
                     <tr>
-                        <th width="25%">Year</th>
-                        <td colspan="3"><span id="year"></span></td>
-                        <th></th>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <th width="25%">Institute Name</th>
                         <td colspan="3"><span id="inst_name"></span></td>
                         <th></th>
@@ -50,6 +44,20 @@
                         <td><span id="gender"></span></td>
                     </tr>
                     <tr>
+                        <th>Student Name</th>
+                        <td><span id="student_name"></span></td>
+                        <th>Photo</th>
+                        <td>
+                            <img id="studentPhoto" class="profile-user-img" style="width: 5rem;height:5rem" src="" alt="Photo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Relation with Student</th>
+                        <td colspan="3"><span id="rel_with_student"></span></td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <th>Present Address</th>
                         <td colspan="3"><span id="address"></span></td>
                         <th></th>
@@ -61,13 +69,6 @@
                         <th></th>
                         <td></td>
                     </tr>
-                    <tr>
-                        <th>Education Qualification</th>
-                        <td colspan="3"><span id="edu_qualification"></span></td>
-                        <th></th>
-                        <td></td>
-                    </tr>
-
                 </tbody>
             </table>
         </div>

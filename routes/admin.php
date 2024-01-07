@@ -55,6 +55,25 @@ Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Backend'], fun
         Route::post('/toggle-status', 'MarksSettingsController@changeStatus');
     });
 
+    // Marks Entry Routes
+    Route::group(['prefix' => 'marks-entry'], function () {
+        Route::get('/list', 'MarksEntryController@index')->name('backend.marks-entry');
+        Route::get('/add', 'MarksEntryController@add')->name('backend.marks-entry.add');
+        Route::get('/edit/{id}', 'MarksEntryController@edit');
+        Route::get('/show/{id}', 'MarksEntryController@show');
+        Route::get('/view/{id}', 'MarksEntryController@view');
+        Route::post('/store', 'MarksEntryController@store');
+
+        Route::get('/import-excel', 'MarksEntryController@addExcel')->name('backend.marks-entry.excel');
+        Route::get('/export-excel', 'ExcelExportController@exportExcel');
+
+        // Excel Import
+        Route::post('/import-excel', 'ExcelImportController@importMarksExcel');
+        
+        Route::post('/toggle-status', 'MarksEntryController@changeStatus');
+    });
+
+
     // Teacher Routes
     Route::group(['prefix' => 'teacher'], function () {
         Route::get('/list', 'TeacherController@index')->name('backend.teacher');
@@ -107,7 +126,14 @@ Route::group(['prefix'=>'/', 'namespace' => 'App\Http\Controllers\Backend'], fun
         Route::post('/store', 'EvaluatingIndicatorController@store');
         Route::post('/toggle-status', 'EvaluatingIndicatorController@changeStatus');
     });
-    
+
+
+     // Result Sheet Routes
+     Route::group(['prefix' => 'result-sheet'], function () {
+        Route::get('/list', 'ResultSheetController@index')->name('backend.result-sheet');
+        Route::get('/view/{id}', 'ResultSheetController@view');
+    });
+
     /** ==================== Configuration =================== */
     Route::group(['prefix' => 'configuration'], function () {
         // Master Class routes

@@ -87,7 +87,6 @@
                       <td class="text-center">
                         <button onclick="viewDetails({{ $item }})" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></button>
                         @can('isAdmin')
-                        <a href="{{ url('/parents/edit/'.$item->id) }}" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></a>
                         <button onclick="changeStatus({{ $item->id }})" type="button" class="btn btn-sm {{ $item->status == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}">
                           <i class="fas fa-toggle-{{ $item->status == 1 ? 'on' : 'off' }}"></i>
                         </button>
@@ -105,7 +104,7 @@
     </div>
 
     <div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             @include('backend.parents.details')
         </div>
     </div>
@@ -149,12 +148,12 @@
         $("#address").text(item.user.address);
         $("#per_address").text(item.per_address);
         $("#nid").text(item.nid);
-        $("#auto_id").text(item.auto_id);
+        $("#rel_with_student").text(item.rel_with_student);
         $("#dob").text(item.dob);
         $("#gender").text(item.gender == 1 ? 'Male' : 'Female');
-        $("#year").text(item.year);
-        $("#edu_qualification").text(item.edu_qualification);
         $('#photo').attr('src', '/storage/' + item.user.photo);
+        $('#studentPhoto').attr('src', '/storage/' + item.child.photo);
+        $("#student_name").text(item.child.name);
     }
 
     function changeStatus (id) {

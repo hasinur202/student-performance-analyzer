@@ -146,7 +146,26 @@
             </a>
           </li>
           @endcan
-          
+
+          @can('isTeacher')
+          <li class="nav-item">
+            <a href="{{ route('backend.marks-entry') }}" class="nav-link {{ $route == 'backend.marks-entry' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-tasks"></i>
+              <p>
+                Marks Entry
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          <li class="nav-item">
+            <a href="{{ route('backend.result-sheet') }}" class="nav-link {{ $route == 'backend.result-sheet' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-newspaper"></i>
+              <p>
+                Result Sheet
+              </p>
+            </a>
+          </li>
 
         @can('isAdmin')
           <li class="nav-item {{ ($route == 'backend.class' || $route == 'backend.group' || $route == 'backend.section' || $route == 'backend.subject' || $route == 'backend.shift') ? 'menu-is-openning menu-open' : '' }}">

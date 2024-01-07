@@ -23,6 +23,7 @@ class ParentsController extends Controller
         $guardianId = session('guardian_id') ? session('guardian_id') : null;
 
         $data = Guardian::query()
+        ->with('child')
         ->when($insId, function ($q) use ($insId) {
             $q->where('institute_id', $insId);
         })
@@ -110,7 +111,7 @@ class ParentsController extends Controller
 
                 if ($guardian) {
                     /** Mail Send to Teachers email */
-                    (new MailSendAction())->handle($user, 'mail.verification');
+                    // (new MailSendAction())->handle($user, 'mail.verification');
                 }
             }
 
@@ -162,7 +163,7 @@ class ParentsController extends Controller
 
     public function changeStatus(Request $request){
 
-        $model = Teacher::find($request->id);
+        $model = Guardian::find($request->id);
         
         $model->status = $model->status == 1 ? 2 : 1;
         $model->update();

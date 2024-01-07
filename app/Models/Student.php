@@ -61,4 +61,9 @@ class Student extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function marks ()
+    {
+        return $this->hasMany(MarksEntryDetail::class, 'student_id');
+    }
 }

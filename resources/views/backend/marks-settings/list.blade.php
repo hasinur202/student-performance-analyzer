@@ -75,8 +75,8 @@
                       <td class="text-center">
                       <a href="{{ url('/marks-settings/view/'.$item->id) }}" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></a>
                         @can('isAdmin')
-                        @if(!$item->status)
                         <a href="{{ url('/marks-settings/edit/'.$item->id) }}" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></a>
+                        @if(!$item->status)
 
                         <button onclick="changeStatus({{ $item->id }})" title="Final Save" type="button" class="btn btn-sm btn-outline-success">
                           <i class="fas fa-check }}"></i>

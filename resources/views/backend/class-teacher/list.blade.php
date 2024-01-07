@@ -77,13 +77,6 @@
                       <td class="text-center">{{ $item->shift->shift_name }}</td>
                       <td class="text-center">{{ $item->institute->inst_name }}</td>
                       <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('MMM Do YYYY, h:mm A') }}</td>
-                      <!-- <td class="text-center">
-                        @if($item->status == 1)
-                          <span class="badge badge-success">Active</span>
-                        @else
-                          <span class="badge badge-danger">Inactive</span>
-                        @endif                            
-                      </td> -->
                       @can('isAdmin')
                       <td class="text-center">
                         <a href="{{ url('/class-teacher/edit/'.$item->id) }}" class="btn btn-outline-primary btn-sm"><i class="far fa-edit"></i></a>
