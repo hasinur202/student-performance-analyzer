@@ -75,6 +75,10 @@ class ExcelImportController extends Controller
             if ($markss) {
                 $id = $markss->id;
             } else {
+                if ($data['group_id'] == 'null') {
+                    $data['group_id'] = null;
+                }
+
                 $marksd = MarksEntry::create($data);
                 $id = $marksd->id;
             }

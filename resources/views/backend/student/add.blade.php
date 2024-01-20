@@ -213,14 +213,14 @@
                   <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="form-label">Present Address</label>
+                            <label class="form-label">Present Address <span class="text-danger">*</span></label>
                             <input type="text" name="address" id="address" class="form-control" placeholder="Present address">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="form-label">Permanent Address</span></label>
+                            <label class="form-label">Permanent Address <span class="text-danger">*</span></label>
                             <input type="text" name="per_address" id="per_address" class="form-control" placeholder="Permanent address">
                         </div>
                     </div>

@@ -200,11 +200,13 @@
                                                     </td>
                                                     <td class="text-center" style="{{ (count($subjects) - 1) != $key ? 'border-bottom: 1px solid #fff !important' : '' }}">
                                                         @php
-                                                            $overallTotal = round((($totalObtainMarks * 95) / $totalMarks), 2);
-                                                            $gradeData = \App\Models\MasterGrade::where('lower_limit', '<=', $overallTotal)
-                                                                        ->where('upper_limit', '>=', $overallTotal)
-                                                                        ->first();
-                                                            $totalGradePoint += $gradeData->value;
+                                                            if ($totalMarks) {
+                                                                $overallTotal = round((($totalObtainMarks * 95) / $totalMarks), 2);
+                                                                $gradeData = \App\Models\MasterGrade::where('lower_limit', '<=', $overallTotal)
+                                                                            ->where('upper_limit', '>=', $overallTotal)
+                                                                            ->first();
+                                                                $totalGradePoint += $gradeData->value;
+                                                            }
                                                         @endphp    
                                                         {{ $overallTotal }}
                                                     </td>

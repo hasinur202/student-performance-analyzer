@@ -35,7 +35,7 @@
           <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Class Wise Teacher List</h3>
-                @can('isTeacher')
+                @can('isAdmin')
                 <a href="{{ route('backend.class_teacher.add') }}" class="btn btn-primary btn-sm" style="float: right;">
                     <i class="fa fa-plus"></i> Add New
                 </a>

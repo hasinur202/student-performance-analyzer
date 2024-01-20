@@ -40,11 +40,10 @@ class StudentController extends Controller
         $shiftIds = null;
         if ($teacherId) {
             $classIds = session('class_ids') ?? null;
-            $groupIds = session('group_ids') ?? null;
+            // $groupIds = session('group_ids') ?? null;
             $sectionIds = session('section_ids') ?? null;
             $shiftIds = session('shift_ids') ?? null;
         }
-
 
         $data = Student::query()
         ->when($insId, function ($q) use ($insId) {

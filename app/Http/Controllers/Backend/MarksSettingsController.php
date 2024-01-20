@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Actions\MailSendAction;
-use App\Helpers\FileUploadHelper;
 use App\Http\Controllers\Controller;
 use App\Models\MarksSetting;
-use App\Models\Teacher;
-use App\Models\User;
-use App\Services\CommonDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class MarksSettingsController extends Controller
