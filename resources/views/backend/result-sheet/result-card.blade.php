@@ -294,7 +294,7 @@
                                                             @php
                                                                 $totalAvgLast = $totalObtainLast / $count;
                                                             @endphp
-                                                            {{ round(($totalGradePoint / $subjectCount), 2) }}
+                                                            {{ $totalGradePoint ? round(($totalGradePoint / $subjectCount), 2) : 0 }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
