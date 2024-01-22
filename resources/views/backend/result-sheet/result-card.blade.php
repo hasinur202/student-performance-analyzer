@@ -70,6 +70,7 @@
     </section>
     @php
         $totalGradePoint = 0;
+        $subjectCount = 0;
     @endphp
 
     <!-- Main content -->
@@ -138,7 +139,7 @@
                                             <th rowspan="{{ $rowSpan }}" class="text-center align-middle" style="width: 50px !important;">SL</th>
                                             <th rowspan="{{ $rowSpan }}" class="align-middle text-center" width="15%">Subject Name</th>
 
-                                            @foreach (collect($labels)->take(7) as $key => $label)
+                                            @foreach (collect($labels)->slice(0, -3) as $key => $label)
                                                 @if(count($label['marks']) > 1)
                                                 <th colspan="{{ count($label['marks']) }}" width="20%" class="align-middle text-center"> {{ $label['indicator_name'] }}</th>
                                                 @else
@@ -150,7 +151,7 @@
                                             <th rowspan="{{ $rowSpan }}" class="align-middle text-center" width="10%">Marks (Out of 95)</th>
                                         </tr>
                                         <tr>
-                                            @foreach (collect($labels)->take(7) as $key => $label)
+                                            @foreach (collect($labels)->slice(0, -3) as $key => $label)
                                                 @if(count($label['marks']) > 1)
                                                     @foreach ($label['marks'] as $key1 => $val)
                                                         <th class="text-center"> {{ 'Phase-'.($key1+1) }}</th>
@@ -170,11 +171,11 @@
                                                     </td>
 
                                                     @php
-                                                        $details = collect($item['indicators'])->take(7);
+                                                        $details = collect($item['indicators'])->slice(0, -3);
                                                         $totalMarks = 0;
                                                         $totalObtainMarks = 0;
                                                     @endphp
-                                                    @foreach (collect($labels)->take(7) as $key1 => $label)
+                                                    @foreach (collect($labels)->slice(0, -3) as $key1 => $label)
                                                         @if(count($label['marks']) > 1)
                                                             @foreach ($label['marks'] as $key2 => $val)
                                                                 <td class="text-center" style="{{ (count($subjects) - 1) != $key ? 'border-bottom: 1px solid #fff !important' : '' }}">
@@ -200,14 +201,16 @@
                                                     </td>
                                                     <td class="text-center" style="{{ (count($subjects) - 1) != $key ? 'border-bottom: 1px solid #fff !important' : '' }}">
                                                         @php
-                                                            if ($totalMarks) {
+                                                            $overallTotal = 0;
+                                                            if ($totalMarks && $totalObtainMarks) {
+                                                                $subjectCount++;
                                                                 $overallTotal = round((($totalObtainMarks * 95) / $totalMarks), 2);
                                                                 $gradeData = \App\Models\MasterGrade::where('lower_limit', '<=', $overallTotal)
                                                                             ->where('upper_limit', '>=', $overallTotal)
                                                                             ->first();
-                                                                $totalGradePoint += $gradeData->value;
+                                                                $totalGradePoint += $gradeData->value ?? 0;
                                                             }
-                                                        @endphp    
+                                                        @endphp
                                                         {{ $overallTotal }}
                                                     </td>
                                                 </tr>
@@ -231,7 +234,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td class="text-center p-0">
-                                                            @foreach (collect($labels)->skip(7)->take(3) as $key1 => $label)
+                                                            @foreach (array_slice($labels, -3) as $key1 => $label)
                                                                 <div>
                                                                     {{ $label['indicator_name'] }}
                                                                 </div>
@@ -241,10 +244,12 @@
                                                             @php
                                                                 $newArry = [];
                                                                 $indicTotal = 0;
+                                                                $count = 0;
+                                                                $totalObtainLast = 0;
                                                             @endphp
 
                                                             @foreach ($subjects as $key => $item)
-                                                                @foreach (collect($item['indicators'])->skip(7)->take(3) as $indicator)
+                                                                @foreach (array_slice($item['indicators'], -3) as $indicator)
                                                                     @php
                                                                         $totalIn = (collect($indicator['marks'])->sum('obtain_marks'));
                                                                         $nitem['obtain_marks'] = $totalIn;
@@ -254,12 +259,16 @@
                                                                 @endforeach
                                                             @endforeach
 
-                                                            @foreach (collect($labels)->skip(7)->take(3) as $key1 => $label)
+                                                            @foreach (array_slice($labels, -3) as $key1 => $label)
                                                                 <div>
                                                                     @php
-                                                                        $indicTotal = $label['marks'][0]['total_marks'] ?? $indicTotal;
+                                                                        if ($label['marks'][0]['total_marks'] ?? 0) {
+                                                                            $indicTotal = $label['marks'][0]['total_marks'] ?? $indicTotal;
+                                                                            $count += 1;
+                                                                        }
                                                                         $totalIndicatorMarks = collect($newArry)->where('indicator_id', $label['id'])->sum('obtain_marks') ?? 0;
                                                                         $avg = $totalIndicatorMarks ? ($totalIndicatorMarks / count($subjects)) : '0';
+                                                                        $totalObtainLast += $avg;
                                                                         echo $avg;
                                                                     @endphp
                                                                 </div>
@@ -282,7 +291,10 @@
                                                 <tbody>
                                                     <tr>
                                                         <td class="text-center">
-                                                            {{ round($totalGradePoint / count($subjects), 2) }}
+                                                            @php
+                                                                $totalAvgLast = $totalObtainLast / $count;
+                                                            @endphp
+                                                            {{ round(($totalGradePoint / $subjectCount), 2) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>

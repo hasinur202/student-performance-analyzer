@@ -111,7 +111,7 @@ class ParentsController extends Controller
 
                 if ($guardian) {
                     /** Mail Send to Teachers email */
-                    // (new MailSendAction())->handle($user, 'mail.verification');
+                    (new MailSendAction())->handle($user, 'mail.verification');
                 }
             }
 

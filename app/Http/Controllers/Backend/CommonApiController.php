@@ -91,7 +91,7 @@ class CommonApiController extends Controller
         $sectionIds = null;
         if ($teacherId) {
             $classIds = session('class_ids') ?? null;
-            $groupIds = session('group_ids') ?? null;
+            // $groupIds = session('group_ids') ?? null;
             $sectionIds = session('section_ids') ?? null;
         }
 
