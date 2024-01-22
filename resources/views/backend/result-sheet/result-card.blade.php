@@ -211,7 +211,7 @@
                                                                 $totalGradePoint += $gradeData->value ?? 0;
                                                             }
                                                         @endphp
-                                                        {{ $overallTotal }}
+                                                        {{ number_format($overallTotal) }}
                                                     </td>
                                                 </tr>
                                             @endforeach
